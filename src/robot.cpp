@@ -12,6 +12,8 @@
 #define RB_PORT 13
 #define IMU_PORT 20
 
+#define 
+
 pros::Motor INTAKE (INTAKE_PORT, pros::E_MOTOR_GEARSET_18, false);
 
 pros::Motor LF (LF_PORT, pros::E_MOTOR_GEARSET_06, false);
@@ -24,3 +26,5 @@ pros::Motor RB (RB_PORT, pros::E_MOTOR_GEARSET_06, true);
 pros::Controller con (pros::E_CONTROLLER_MASTER);
 
 pros::Imu imu (IMU_PORT);
+
+pros::ADIDigitalOut mogo ('C', false)
