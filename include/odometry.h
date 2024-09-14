@@ -6,6 +6,7 @@
 
 #define FORWARD_OFFSET 0
 #define IMU_THRESHOLD 0.0001
+//#define HEADING_CUTOFF 100
 
 extern void odometry();
 extern void setPosition(float xcoord, float ycoord, float heading);

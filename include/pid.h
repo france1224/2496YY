@@ -25,7 +25,7 @@ extern void chasMove(int voltageLF, int voltageLB, int voltageLM, int voltageRF,
 
 extern int time2;
 
-
+extern bool slewToggle;
 
 #define STRAIGHT_KP 1.75
 #define STRAIGHT_KI 0.01

@@ -11,6 +11,8 @@ using namespace std;
 double absoluteAngleToTarget = 0;
 double hypot2 = 0;
 
+double const HEADING_CUTOFF = 100;
+
 float deltaX;
 float deltaY;
 
@@ -79,7 +81,7 @@ void odometry (){
     r0 = ((delta_left_encoder_pos + delta_right_encoder_pos)/2)/phi;
     r1 = delta_center_encoder_pos/phi;
 
-    if(phi<IMU_THRESHOLD){
+    if(abs(phi)<IMU_THRESHOLD){
         localX = (delta_left_encoder_pos + delta_right_encoder_pos)/2;
         localY = delta_center_encoder_pos - FORWARD_OFFSET * ((pi*phi)/180);
     }else{
@@ -87,8 +89,8 @@ void odometry (){
         localY = r1*sin((pi*phi)/180)+r0*(1-cos((pi*phi)/180));
     }
 
-    deltaX = localX * cos((pi*imu_pos)/180) - localY*sin((pi*imu_pos)/180);
-    deltaY = localX * sin((pi*imu_pos)/180) +localY * cos((pi*imu_pos)/180);
+    deltaY = localX * cos((pi*imu_pos)/180) - localY*sin((pi*imu_pos)/180);
+    deltaX = localX * sin((pi*imu_pos)/180) +localY * cos((pi*imu_pos)/180);
 
     x_pos += deltaX;
     y_pos += deltaY;
@@ -96,14 +98,14 @@ void odometry (){
     if(odo_time % 50 == 0 && odo_time % 100 != 0 &&  odo_time % 150 != 0){
         con.print(0,0, "x_pos: %f            ", float(x_pos));
 
-    }else if (odo_time % 50 == 0 && odo_time % 100 != 0){
+    }else if (odo_time % 100 == 0 && odo_time % 150 != 0){
         con.print(1,0, "y_pos: %f            ", float(y_pos));
 
-    }else if (odo_time%50 == 0){
+    }else if (odo_time%150 == 0){
         con.print(2,0, "angle: %f            ", float(absoluteAngleToTarget));
     }
 
-    odo_time += 1;
+    odo_time += 10;
 
 }
 
@@ -119,11 +121,11 @@ void boomerang(double xTarget, double yTarget){
     while(true){
         odometry ();
         hypot = sqrt(pow((x_pos - xTarget),2) + pow((y_pos - yTarget), 2));
-        absoluteAngleToTarget = (180/pi)*(atan2((x_pos - xTarget), (y_pos - yTarget)))+90;
+        absoluteAngleToTarget = (180/pi)*(atan2((xTarget - x_pos), (yTarget - y_pos)));
         
-        if(absoluteAngleToTarget>0){
-            absoluteAngleToTarget += 360;
-        }
+    //    if(absoluteAngleToTarget>0){
+    //        absoluteAngleToTarget -= 360;
+    //    }
 
         if (absoluteAngleToTarget > 180){
             absoluteAngleToTarget = absoluteAngleToTarget - 360;
@@ -135,45 +137,56 @@ void boomerang(double xTarget, double yTarget){
             position = position - 360;
         }
 
-        if((absoluteAngleToTarget<0) && (position>0)){
-            if((position - absoluteAngleToTarget)>=180){
-                absoluteAngleToTarget = absoluteAngleToTarget + 360;
-                position = imu.get_heading()+startingHeading;
-                turnv = (absoluteAngleToTarget - position);
-            }else {
-                turnv = (abs(position) + abs(absoluteAngleToTarget));
-            }
-        }else if ((absoluteAngleToTarget > 0) && (position < 0)){
+        if((absoluteAngleToTarget > 0) && (position <0)){
+            turnv = absoluteAngleToTarget - position;
+        }else if ((absoluteAngleToTarget < 0) && (position > 0)){
+            turnv = position - absoluteAngleToTarget;
+        }else {
+            turnv = abs(abs(absoluteAngleToTarget) - abs(position));
+        }   
 
-            if((absoluteAngleToTarget - position)>= 180){
-                position = imu.get_heading() + startingHeading;
-                turnv = abs(abs(position) - abs(absoluteAngleToTarget));
-            }else {
-                turnv = (abs(position) + absoluteAngleToTarget);
-            }
-        }else{
-            turnv = abs(abs(position) - abs(absoluteAngleToTarget));
-        }
+        // if((absoluteAngleToTarget<0) && (position>0)){
+        //     if((position - absoluteAngleToTarget)>=180){
+        //         absoluteAngleToTarget = absoluteAngleToTarget + 360;
+        //         position = imu.get_heading()+startingHeading;
+        //         turnv = (absoluteAngleToTarget - position);
+        //     }else {
+        //         turnv = (abs(position) + abs(absoluteAngleToTarget));
+        //     }
+        // }else if ((absoluteAngleToTarget > 0) && (position < 0)){
 
-        if(abs(absoluteAngleToTarget - position)>90){
-            position = position + 180;
+        //     if((absoluteAngleToTarget - position)>= 180){
+        //         position = imu.get_heading() + startingHeading;
+        //         turnv = abs(abs(position) - abs(absoluteAngleToTarget));
+        //     }else {
+        //         turnv = (abs(position) + absoluteAngleToTarget);
+        //     }
+        // }else{
+        //     turnv = abs(abs(position) - abs(absoluteAngleToTarget));
+        // }
+
+        if(abs(turnv)>90){
+            absoluteAngleToTarget = absoluteAngleToTarget + 180;
             hypot = -hypot;
         }
 
+        if(absoluteAngleToTarget >= 359){
+            absoluteAngleToTarget = absoluteAngleToTarget - 360;
+        }
         // while(position>180){
         //     position = position - 360;
         // }
 
-        // if((absoluteAngleToTarget<0) && (position > 0)){
-        //     if((position - absoluteAngleToTarget) >= 180){
-        //         absoluteAngleToTarget = absoluteAngleToTarget + 360;
-        //         position = imu.get_heading()+startingHeading;
-        //     }
-        // }else if ((absoluteAngleToTarget > 0) && (position<0)){
-        //     if((absoluteAngleToTarget - position) >= 180){
-        //         position = imu.get_heading()+startingHeading;
-        //     }
-        // }
+        if((absoluteAngleToTarget<0) && (position > 0)){
+            if((position - absoluteAngleToTarget) >= 180){
+                absoluteAngleToTarget = absoluteAngleToTarget + 360;
+                position = imu.get_heading();
+            }
+        }else if ((absoluteAngleToTarget > 0) && (position<0)){
+            if((absoluteAngleToTarget - position) >= 180){
+                position = imu.get_heading();
+            }
+        }
 
         setConstants(TURN_KP, TURN_KI, TURN_KD);
         heading_correction = calcPID(absoluteAngleToTarget, position, TURN_INTEGRAL_KI, TURN_MAX_INTEGRAL);
@@ -188,13 +201,16 @@ void boomerang(double xTarget, double yTarget){
             voltage = -17;
         }
 
+
         if(heading_correction>20){
             heading_correction = 20;
         }else if(heading_correction<-20){
             heading_correction = -20;
         }
 
-        voltage = 0;
+        if(abs(hypot)< HEADING_CUTOFF){
+            heading_correction = 0;
+        }
         chasMove((voltage + heading_correction),(voltage + heading_correction),(voltage + heading_correction), (voltage - heading_correction),(voltage - heading_correction),(voltage - heading_correction));
         if(abs(hypot)<15) count++;
         if((count> 20)||(btime>timeout)){

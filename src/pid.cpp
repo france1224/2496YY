@@ -7,6 +7,9 @@ using namespace pros;
 using namespace c; 
 using namespace std;
 
+bool slewToggle = false;
+double slew = 5;
+
 double vKp;
 double vKi;
 double vKd;
@@ -69,7 +72,9 @@ void chasMove(int voltageLF, int voltageLB, int voltageLM, int voltageRF, int vo
 double calcPID(double target, double input, int integralKi, int maxIntegral){
     int integral;
     prevError = error;
+    prevPower = power;
     error = target-input;
+
 
     if(abs(error) < integralKi) {
         integral += error;
@@ -86,6 +91,21 @@ double calcPID(double target, double input, int integralKi, int maxIntegral){
     derivative = error - prevError;
 
     power = (vKp * error) + (vKi*integral) + (vKd * derivative);
+
+    if(abs(input) > abs(target/2)){
+        slewToggle = false;
+    }
+
+    if(slewToggle){
+        if((power - prevPower) > slew){
+            power = prevPower + slew;
+        } else if ((power - prevPower) < -slew){
+            power = prevPower - slew;
+        }
+    }
+
+
+
     return power;
 
 }
@@ -199,17 +219,8 @@ void driveStraight(int target){
 
         chasMove((voltage+heading_error), (voltage+heading_error), (voltage+heading_error), (voltage-heading_error), (voltage-heading_error), (voltage-heading_error));
 
-        if(target>0){
-            if((encoderAvg - (target - 500))>0){
-                over = true;
-            }
-        }else{
-            if(((target+500)-encoderAvg)>0){
-                over = true;
-            }
-        }
-
-        if(over||time2>timeout){
+        if(abs(target - encoderAvg) <= 4) count++;
+        if (count >= 20 || time2>timeout){
             break;
         }
 
@@ -234,7 +245,7 @@ void driveStraight2(int target){
 
     double x = 0;
     x = double(abs(target));
-    timeout = (0.000000000000097017*pow(x,5)) + (-0.00000000055038 * pow(x,4))+ (0.00000106378 * pow(x,3)) + (-0.000841031 * pow(x,2)) + (0.591258 *x) + 311.616;
+   // timeout = (0.000000000000097017*pow(x,5)) + (-0.00000000055038 * pow(x,4))+ (0.00000106378 * pow(x,3)) + (-0.000841031 * pow(x,2)) + (0.591258 *x) + 311.616;
     
 
     double voltage;
@@ -287,17 +298,9 @@ void driveStraight2(int target){
 
         chasMove((voltage+heading_error), (voltage+heading_error), (voltage+heading_error), (voltage-heading_error), (voltage-heading_error), (voltage-heading_error));
 
-        if(target>0){
-            if((encoderAvg - (target-500))>0){
-                over=true;
-            }
-        }else {
-            if(((target+500)-encoderAvg)>0){
-                over = true;
-            }
-        }
-
-        if(over || time2>timeout){
+       
+        if(abs(target - encoderAvg) <= 4) count++;
+        if (count >= 20 || time2>timeout){
             break;
         }
 

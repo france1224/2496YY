@@ -126,12 +126,14 @@ void opcontrol() {
 			//driveTurn(165);
 			//driveStraightC(1000);
 			//driveArcL(90, 650, 30000);
-			setPosition(0, 0, 0);
-			boomerang(-500,0);
+			// setPosition(0, 0, 0);
+			// boomerang(0, 1000);
 			//while (true){
 			//	odometry();
 			//	delay(1);
 			//}
+			slewToggle = true;
+			driveStraight2(2000);
 
 		}
 	time++;
