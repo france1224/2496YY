@@ -71,6 +71,9 @@ void opcontrol(void);
 }
 #endif
 
+extern int RingColor;
+extern bool mogo_toggle;
+
 #ifdef __cplusplus
 /**
  * You can add C++-only headers here

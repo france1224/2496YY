@@ -13,10 +13,15 @@ extern pros::Motor RM;
 extern pros::Motor RB;
 
 extern pros::Motor INTAKE;
+extern pros::Motor CONVEYOR;
 
 extern pros::Imu imu;
 
+extern pros::ADIDigitalIn selec;
 
+extern pros::ADIDigitalOut mogo;
+
+extern pros::Optical OpticalC;
 
 
 #endif

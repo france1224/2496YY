@@ -34,6 +34,8 @@ void initialize() {
 	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
+
+	OpticalC.set_led_pwm(100);
 }
 
 /**
@@ -52,7 +54,58 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+
+int RingColor = 2;
+int atn = 0; //decides everything!!
+int pressed = 0;
+string autstr; //to print
+bool forward;
+bool backward;
+
+void competition_initialize() {
+
+	while(true){
+
+		if(selec.get_value() == true){
+			pressed++;
+		}
+
+		if(selec.get_value() == false){
+			pressed = 0;
+		}
+
+		if(pressed = 1){
+			atn++;
+		}
+
+		if (atn == 0){
+			autstr = "Skills";
+			con.print(0,0, "Aut 0: %s       ", autstr);
+
+		} else if (atn == 1){
+			autstr = "NONE";
+			con.print(0,0, "Aut 1: %s       ", autstr);
+
+	} else if (atn == 2){
+			autstr = "REDL";
+			con.print(0,0, "Aut 2: %s       ", autstr);
+} else if (atn == 3){
+			autstr = "REDR";
+			con.print(0,0, "Aut 3: %s       ", autstr);
+} else if (atn == 4){
+			autstr = "BLUEL";
+			con.print(0,0, "Aut 4: %s       ", autstr);
+		} else if (atn == 5){
+			autstr = "BLUER";
+			con.print(0,0, "Aut 5: %s       ", autstr);
+
+		}else if (atn == 6){
+			atn = 0;
+		}
+
+		con.clear();
+	}
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -84,15 +137,53 @@ void opcontrol() {
 	int time = 0;
 	double prev_imu = 0;
 	double curr_imu = 0;
+	int backward = 0;
+	int forward = 0;
+bool mogo_toggle;
+
     while(true) {
+		if(selec.get_value() == true){
+			pressed++;
+		}
+
+		if(selec.get_value() == false){
+			pressed = 0;
+		}
+
+		if(pressed == 1){
+			atn++;
+		}
+
+		if (atn == 0){
+			autstr = "Skills";
+
+		} else if (atn == 1){
+			autstr = "NONE";
+
+	} else if (atn == 2){
+			autstr = "REDL";
+
+} else if (atn == 3){
+			autstr = "REDR";
+
+} else if (atn == 4){
+			autstr = "BLUEL";
+
+		} else if (atn == 5){
+			autstr = "BLUER";
+
+		}else if (atn == 6){
+			atn = 0;
+		}
+
 		prev_imu = curr_imu;
 		curr_imu = imu.get_rotation();
 		if(time %50 == 0 && time %100 != 0 && time % 150 != 0){
-			con.print(0,0, "Temp: %f        ", float(LF.get_temperature()));
+			con.print(0,0, "intake: %f        ", bool(forward));
 		} else if (time % 50 == 0 && time % 100 != 0){
 			con.print(1, 0, "Imu: %f       ", float(imu.get_heading()));
 		} else if (time % 50 == 0){
-			con.print(2, 0, "Noise: %f      ", float (curr_imu - prev_imu));
+			con.print(2, 0, "Auton: %s      ", autstr);
 		}
 		int power = con.get_analog(ANALOG_LEFT_Y);
 		int RX = con.get_analog(ANALOG_RIGHT_X);
@@ -114,31 +205,76 @@ void opcontrol() {
 		
 		//tank
 
-		//LF.move(con.get_analog(ANALOG_LEFT_Y));
-		//LM.move(con.get_analog(ANALOG_LEFT_Y));
-		//LB.move(con.get_analog(ANALOG_LEFT_Y));
-		//RF.move(con.get_analog(ANALOG_LEFT_Y));
-		//RM.move(con.get_analog(ANALOG_LEFT_Y));
-		//RB.move(con.get_analog(ANALOG_LEFT_Y));
+		// LF.move(con.get_analog(ANALOG_LEFT_Y));
+		// LM.move(con.get_analog(ANALOG_LEFT_Y));
+		// LB.move(con.get_analog(ANALOG_LEFT_Y));
+		// RF.move(con.get_analog(ANALOG_LEFT_Y));
+		// RM.move(con.get_analog(ANALOG_LEFT_Y));
+		// RB.move(con.get_analog(ANALOG_LEFT_Y));
 
-		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_X)){
-			//driveStraight2(2000);
-			//driveTurn(165);
-			//driveStraightC(1000);
-			//driveArcL(90, 650, 30000);
-			// setPosition(0, 0, 0);
-			// boomerang(0, 1000);
+		// if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_X)){
+		// 	//driveStraight2(2000);
+		// 	//driveTurn(165);
+		// 	//driveStraightC(1000);
+		// 	//driveArcL(90, 650, 30000);
+		// 	mogo_toggle = !mogo_toggle;
+		// 	mogo.set_value(mogo_toggle);
+		// 	delay(100);
+
+		// 	driveStraight2(-700);
+		// 	delay(120);
+		// 	driveTurn2(-25);
+		// 	delay(150);
+		// 	driveSlow(-500, 70);
+		// 	delay(600);
+		// 	mogo_toggle = !mogo_toggle;
+		// 	mogo.set_value(mogo_toggle);
+		// 	delay(1000);
+		// 	driveStraight2(1000);
+		// 	CONVEYOR.move(127);
+		// 	delay(1000);
+		// 	CONVEYOR.brake();
+			
+
+			
 			//while (true){
 			//	odometry();
 			//	delay(1);
 			//}
-			slewToggle = true;
-			driveStraight2(2000);
 
+	
+
+		if(con.get_digital(E_CONTROLLER_DIGITAL_L1)){
+			INTAKE.move(127);
+			CONVEYOR.move(127);
+			forward = 1;
+		} else {
+			forward = 2;
 		}
+
+
+		if(con.get_digital(E_CONTROLLER_DIGITAL_L2)){
+			INTAKE.move(-127);
+			CONVEYOR.move(-127);
+			backward = 1;
+		  }else{
+			backward = 2;
+		  }
+
+		if(forward + backward == 4){
+			INTAKE.move(0);
+			CONVEYOR.move(0);
+		}
+
+		
+
+
+		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_R1)){
+			mogo.set_value(mogo_toggle);
+			mogo_toggle = !mogo_toggle;
+		}
+	}
+
 	time++;
 	delay(1);	
 	}
-}
-
-

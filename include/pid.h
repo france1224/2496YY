@@ -23,20 +23,29 @@ extern void setConstants(double kp, double ki, double kd);
 
 extern void chasMove(int voltageLF, int voltageLB, int voltageLM, int voltageRF, int voltageRM, int voltageRB);
 
+extern void driveClamp (int target, int clampDistance);
+extern void driveSlow (int target, int speed);
+
+extern void ColorSort(int color);
+
+extern void IntakeConveyor(int voltage);
+
+extern void MOGO(bool mogo_toggle);
+
 extern int time2;
 
-extern bool slewToggle;
 
-#define STRAIGHT_KP 1.75
-#define STRAIGHT_KI 0.01
-#define STRAIGHT_KD 7
+
+#define STRAIGHT_KP 4
+#define STRAIGHT_KI 0
+#define STRAIGHT_KD 1
 
 #define STRAIGHT_INTEGRAL_KI 40
 #define STRAIGHT_MAX_INTEGRAL 14.5
 
-#define TURN_KP 5
+#define TURN_KP 7
 #define TURN_KI 0.01
-#define TURN_KD 43
+#define TURN_KD 12
 
 #define TURN_INTEGRAL_KI 30
 #define TURN_MAX_INTEGRAL 25

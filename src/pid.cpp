@@ -7,9 +7,6 @@ using namespace pros;
 using namespace c; 
 using namespace std;
 
-bool slewToggle = false;
-double slew = 5;
-
 double vKp;
 double vKi;
 double vKd;
@@ -72,9 +69,7 @@ void chasMove(int voltageLF, int voltageLB, int voltageLM, int voltageRF, int vo
 double calcPID(double target, double input, int integralKi, int maxIntegral){
     int integral;
     prevError = error;
-    prevPower = power;
     error = target-input;
-
 
     if(abs(error) < integralKi) {
         integral += error;
@@ -91,21 +86,6 @@ double calcPID(double target, double input, int integralKi, int maxIntegral){
     derivative = error - prevError;
 
     power = (vKp * error) + (vKi*integral) + (vKd * derivative);
-
-    if(abs(input) > abs(target/2)){
-        slewToggle = false;
-    }
-
-    if(slewToggle){
-        if((power - prevPower) > slew){
-            power = prevPower + slew;
-        } else if ((power - prevPower) < -slew){
-            power = prevPower - slew;
-        }
-    }
-
-
-
     return power;
 
 }
@@ -185,6 +165,8 @@ void driveStraight(int target){
 
     while(true){
 
+        ColorSort(RingColor);
+
         encoderAvg = (LF.get_position()+RF.get_position()) / 2;
         setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
         voltage = calcPID(target, encoderAvg, STRAIGHT_INTEGRAL_KI, STRAIGHT_MAX_INTEGRAL);
@@ -219,8 +201,17 @@ void driveStraight(int target){
 
         chasMove((voltage+heading_error), (voltage+heading_error), (voltage+heading_error), (voltage-heading_error), (voltage-heading_error), (voltage-heading_error));
 
-        if(abs(target - encoderAvg) <= 4) count++;
-        if (count >= 20 || time2>timeout){
+        if(target>0){
+            if((encoderAvg - (target - 500))>0){
+                over = true;
+            }
+        }else{
+            if(((target+500)-encoderAvg)>0){
+                over = true;
+            }
+        }
+
+        if(over||time2>timeout){
             break;
         }
 
@@ -241,11 +232,13 @@ void driveStraight(int target){
 }
 
 void driveStraight2(int target){
+
+
     int timeout = 10000;
 
     double x = 0;
     x = double(abs(target));
-   // timeout = (0.000000000000097017*pow(x,5)) + (-0.00000000055038 * pow(x,4))+ (0.00000106378 * pow(x,3)) + (-0.000841031 * pow(x,2)) + (0.591258 *x) + 311.616;
+    timeout = (0.000000000000097017*pow(x,5)) + (-0.00000000055038 * pow(x,4))+ (0.00000106378 * pow(x,3)) + (-0.000841031 * pow(x,2)) + (0.591258 *x) + 311.616;
     
 
     double voltage;
@@ -266,6 +259,7 @@ void driveStraight2(int target){
 
     while(true){
 
+        ColorSort(RingColor);
         encoderAvg = (LF.get_position()+RF.get_position()) / 2;
         setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
         voltage = calcPID(target, encoderAvg, STRAIGHT_INTEGRAL_KI, STRAIGHT_MAX_INTEGRAL);
@@ -298,9 +292,17 @@ void driveStraight2(int target){
 
         chasMove((voltage+heading_error), (voltage+heading_error), (voltage+heading_error), (voltage-heading_error), (voltage-heading_error), (voltage-heading_error));
 
-       
-        if(abs(target - encoderAvg) <= 4) count++;
-        if (count >= 20 || time2>timeout){
+        if(target>0){
+            if((encoderAvg - (target-500))>0){
+                over=true;
+            }
+        }else {
+            if(((target+500)-encoderAvg)>0){
+                over = true;
+            }
+        }
+
+        if(over || time2>timeout){
             break;
         }
 
@@ -319,6 +321,192 @@ void driveStraight2(int target){
     RM.brake();
     RB.brake();
 }
+
+void driveClamp(int target, int clampDistance){
+    int timeout = 10000;
+
+    double x = 0;
+    x = double(abs(target));
+    timeout = (0.000000000000097017*pow(x,5)) + (-0.00000000055038 * pow(x,4))+ (0.00000106378 * pow(x,3)) + (-0.000841031 * pow(x,2)) + (0.591258 *x) + 311.616;
+    
+
+    double voltage;
+    double encoderAvg;
+    int count=0;
+    double init_heading = imu.get_heading();
+    double heading_error = 0;
+    int cycle = 0;
+    time2 = 0;
+    bool over = false;
+
+    setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
+    resetEncoders();
+
+    if(init_heading > 180){
+        init_heading = init_heading - 360;
+    }
+
+    while(true){
+
+        ColorSort(RingColor);
+
+        encoderAvg = (LF.get_position()+RF.get_position()) / 2;
+        setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
+        voltage = calcPID(target, encoderAvg, STRAIGHT_INTEGRAL_KI, STRAIGHT_MAX_INTEGRAL);
+
+        double position = imu.get_heading();
+
+        if(position>180){
+            position = position - 360;
+        }
+
+        if((init_heading < 0) && (position > 0)){
+            if((position - init_heading) >=180){
+                init_heading = init_heading+360;
+
+            }
+        }else if ((init_heading > 0) && (position < 0)){
+            if((init_heading-position) >= 180){
+                position = imu.get_heading();
+            }
+        }
+
+        setConstants (HEADING_KP, HEADING_KI, HEADING_KD);
+        heading_error = calcPID2(init_heading, position, HEADING_INTEGRAL_KI, HEADING_MAX_INTEGRAL);
+
+        if(voltage > 127){
+            voltage = 127;
+        } else if(voltage < -127){
+            voltage = -127;
+        }
+
+        if(abs(error) < clampDistance){
+            mogo.set_value(true);
+        }
+
+        chasMove((voltage+heading_error), (voltage+heading_error), (voltage+heading_error), (voltage-heading_error), (voltage-heading_error), (voltage-heading_error));
+
+        if(target>0){
+            if((encoderAvg - (target-500))>0){
+                over=true;
+            }
+        }else {
+            if(((target+500)-encoderAvg)>0){
+                over = true;
+            }
+        }
+
+        if(over || time2>timeout){
+            break;
+        }
+
+        if (time2%50==0){
+            con.print(0, 0, "Error: %f         ", float(error));
+        }
+        delay(10);
+        time2+=10;
+ 
+    }
+
+
+
+    LF.brake();
+    LM.brake();
+    LB.brake();
+    RF.brake();
+    RM.brake();
+    RB.brake();
+}
+
+void driveSlow(int target, int speed){
+    int timeout = 10000;
+
+    double x = 0;
+    x = double(abs(target));
+    timeout = (0.000000000000097017*pow(x,5)) + (-0.00000000055038 * pow(x,4))+ (0.00000106378 * pow(x,3)) + (-0.000841031 * pow(x,2)) + (0.591258 *x) + 311.616;
+    
+
+    double voltage;
+    double encoderAvg;
+    int count=0;
+    double init_heading = imu.get_heading();
+    double heading_error = 0;
+    int cycle = 0;
+    time2 = 0;
+    bool over = false;
+
+    setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
+    resetEncoders();
+
+    if(init_heading > 180){
+        init_heading = init_heading - 360;
+    }
+
+    while(true){
+
+         ColorSort(RingColor);
+        encoderAvg = (LF.get_position()+RF.get_position()) / 2;
+        setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
+        voltage = calcPID(target, encoderAvg, STRAIGHT_INTEGRAL_KI, STRAIGHT_MAX_INTEGRAL); 
+
+        double position = imu.get_heading();
+
+        if(position>180){
+            position = position - 360;
+        }
+
+        if((init_heading < 0) && (position > 0)){
+            if((position - init_heading) >=180){
+                init_heading = init_heading+360;
+
+            }
+        }else if ((init_heading > 0) && (position < 0)){
+            if((init_heading-position) >= 180){
+                position = imu.get_heading();
+            }
+        }
+
+        setConstants (HEADING_KP, HEADING_KI, HEADING_KD);
+        heading_error = calcPID2(init_heading, position, HEADING_INTEGRAL_KI, HEADING_MAX_INTEGRAL);
+
+        if(voltage > 127 * double(speed)/100.0){
+            voltage = 127 * double(speed)/100.0;
+        } else if(voltage < -127 * double(speed)/100.0){
+            voltage = -127 * double(speed)/100.0;
+        }
+
+        chasMove((voltage+heading_error), (voltage+heading_error), (voltage+heading_error), (voltage-heading_error), (voltage-heading_error), (voltage-heading_error));
+
+        if(target>0){
+            if((encoderAvg - (target-500))>0){
+                over=true;
+            }
+        }else {
+            if(((target+500)-encoderAvg)>0){
+                over = true;
+            }
+        }
+
+        if(over || time2>timeout){
+            break;
+        }
+
+        if (time2%50==0){
+            con.print(0, 0, "Error: %f         ", float(error));
+        }
+        delay(10);
+        time2+=10;
+ 
+    }
+
+    LF.brake();
+    LM.brake();
+    LB.brake();
+    RF.brake();
+    RM.brake();
+    RB.brake();
+}
+
 
 void driveStraightC(int target){
     int timeout = 10000;
@@ -350,7 +538,7 @@ void driveStraightC(int target){
     resetEncoders();
 
     while(true){
-
+         ColorSort(RingColor);
         encoderAvg = (LF.get_position()+RF.get_position()) / 2;
         setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
         voltage = calcPID(target, encoderAvg, STRAIGHT_INTEGRAL_KI, STRAIGHT_MAX_INTEGRAL);
@@ -437,6 +625,8 @@ void driveTurn(int target) {
     while(true){
         position = imu.get_heading();
 
+     ColorSort(RingColor);
+
         if(position>180){
             position = (position-360);
         }
@@ -511,6 +701,8 @@ void driveTurn2(int target) {
     timeout = (0.00000013999*pow(x,5)) + (-0.0000662053*pow(x,4)) + (0.0116874*pow(x,3)) + (-0.934041*pow(x,2)) + (35.0169*x) + 157.303;
 
     while(true){
+
+    ColorSort(RingColor);
      position = imu.get_heading();
 
     if(position > 180){
@@ -576,6 +768,8 @@ void driveArcL (double theta, double radius, int timeout){
     rtarget = double((theta/360) * 2 * pi * (radius+750));
 
     while (true){
+
+         ColorSort(RingColor);
 
         double position = imu.get_heading();
 
@@ -651,6 +845,7 @@ void driveArcR (double theta, double radius, int timeout){
     rtarget = double((theta/360) * 2 * pi * radius);
 
     while (true){
+         ColorSort(RingColor);
 
         double position = imu.get_heading();
 
@@ -712,6 +907,7 @@ void driveArcR (double theta, double radius, int timeout){
 void driveArcLF (double theta, double radius, int timeout){
     setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
 
+
     double ltarget = 0;
     double rtarget = 0;
     double ltargetFinal = 0;
@@ -734,6 +930,8 @@ void driveArcLF (double theta, double radius, int timeout){
     rtarget = double((theta/360) * 2 * pi * (radius+750));
 
     while (true){
+
+         ColorSort(RingColor);
 
         double position = imu.get_heading();
 
@@ -826,6 +1024,8 @@ void driveArcRF (double theta, double radius, int timeout){
 
     while (true){
 
+         ColorSort(RingColor);
+
         double position = imu.get_heading();
 
         if(position > 180){
@@ -893,4 +1093,64 @@ void driveArcRF (double theta, double radius, int timeout){
         delay(10);
     }
 
+}
+
+bool InitColor = false;
+int ColorCount;
+bool Backwards = false;
+  
+void ColorSort (int color){
+    if(color==0){// blue rejection
+        if(OpticalC.get_hue()<240 && OpticalC.get_hue()>180){
+            InitColor = true; 
+        }
+  
+        if(InitColor){
+
+            if( Backwards == false){
+                INTAKE.move(127);
+            
+                 if(INTAKE.get_position() > 500){
+                Backwards = true;
+                 }
+            }else {
+                INTAKE.move(-127);
+                if(INTAKE.get_position() < 200){
+                    Backwards = false;
+                    InitColor = false; 
+                }
+            }
+        }else {
+            INTAKE.move(127);
+            INTAKE.tare_position();
+        }
+
+
+
+
+
+    }else if(color==1){ // red rejection
+        if(OpticalC.get_hue()>0 && OpticalC.get_hue()<40){
+            InitColor = true;
+        }
+        if(InitColor){
+
+            if( Backwards == false){
+                INTAKE.move(127);
+            
+                 if(INTAKE.get_position() > 500){
+                Backwards = true;
+                 }
+            }else {
+                INTAKE.move(-127);
+                if(INTAKE.get_position() < 200){
+                    Backwards = false;
+                    InitColor = false; 
+                }
+            }
+        }else {
+            INTAKE.move(127);
+            INTAKE.tare_position();
+        }
+        }
 }
