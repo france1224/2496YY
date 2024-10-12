@@ -73,6 +73,7 @@ void opcontrol(void);
 
 extern int RingColor;
 extern bool mogo_toggle;
+extern int atn;
 
 #ifdef __cplusplus
 /**

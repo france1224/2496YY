@@ -8,6 +8,10 @@ using namespace std;
 using namespace pros;
 void autonomous() {
 
+    if(atn==0){
+        
+    }
+
     RingColor = 2;
 
     bool mogo_toggle2;

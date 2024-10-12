@@ -142,9 +142,48 @@ void opcontrol() {
 bool mogo_toggle;
 
     while(true) {
+
+	
+
+
 		if(selec.get_value() == true){
 			pressed++;
 		}
+
+		// switch(atn){
+		// 	case 0:
+		// 	autstr = "Skills";
+		// 	break;
+
+
+		// 	case 1:
+		// 	autstr = "NONE";
+		// 	break;
+
+
+		// 	case 2:
+		// 	autstr = "REDL";
+		// 	break;
+
+
+		// 	case 3:
+		// 	autstr = "REDR";
+		// 	break;
+
+		// 	case 4:
+		// 	autstr = "BLUEL";
+		// 	break;
+
+		// 	case 5:
+		// 	autstr = "BLUER";
+		// 	break;
+
+		// 	case 6:
+		// 	atn = 0;
+		// 	break;
+
+		// }
+
 
 		if(selec.get_value() == false){
 			pressed = 0;
