@@ -32,4 +32,6 @@ pros::ADIDigitalIn selec ('G');
 
 pros::ADIDigitalOut mogo ('A');
 
+pros::ADIDigitalOut doinker ('H');
+
 pros::Optical OpticalC (OPTICAL_PORT, 10);

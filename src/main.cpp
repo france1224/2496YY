@@ -74,7 +74,7 @@ void competition_initialize() {
 			pressed = 0;
 		}
 
-		if(pressed = 1){
+		if(pressed  = 1){
 			atn++;
 		}
 
@@ -139,7 +139,8 @@ void opcontrol() {
 	double curr_imu = 0;
 	int backward = 0;
 	int forward = 0;
-bool mogo_toggle;
+	bool mogo_toggle;
+	bool doinker_toggle;
 
     while(true) {
 
@@ -280,10 +281,10 @@ bool mogo_toggle;
 			//	odometry();
 			//	delay(1);
 			//}
-
 	
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_L1)){
+			INTAKE.move_velocity(600);
 			INTAKE.move(127);
 			CONVEYOR.move(127);
 			forward = 1;
@@ -293,6 +294,7 @@ bool mogo_toggle;
 
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_L2)){
+			INTAKE.move_velocity(-600);
 			INTAKE.move(-127);
 			CONVEYOR.move(-127);
 			backward = 1;
@@ -311,6 +313,11 @@ bool mogo_toggle;
 		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_R1)){
 			mogo.set_value(mogo_toggle);
 			mogo_toggle = !mogo_toggle;
+		}
+		
+		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_R2)){
+			doinker.set_value(doinker_toggle);
+			doinker_toggle = !doinker_toggle;
 		}
 	}
 

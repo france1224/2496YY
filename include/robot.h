@@ -20,6 +20,7 @@ extern pros::Imu imu;
 extern pros::ADIDigitalIn selec;
 
 extern pros::ADIDigitalOut mogo;
+extern pros::ADIDigitalOut doinker;
 
 extern pros::Optical OpticalC;
 

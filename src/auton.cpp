@@ -9,9 +9,8 @@ using namespace pros;
 void autonomous() {
 
     if(atn==0){
-        
-    }
 
+    }else if(atn == 1){
     RingColor = 2;
 
     bool mogo_toggle2;
@@ -29,6 +28,13 @@ void autonomous() {
     delay(200);
 
     mogo.set_value(mogo_toggle2);
+
+    }else if(atn == 2){
+
+    }else if(atn == 3){
+
+    }
+
 
     // driveTurn2(90);
 
