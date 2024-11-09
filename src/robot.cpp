@@ -1,6 +1,9 @@
 #include "api.h"
 #include "robot.h"
 #include "main.h"
+#include "auton.h"
+#include "odometry.h"
+#include "pid.h"     
 
 //Defines the port so this is the only part that  needs to be changed if the port changes
 #define INTAKE_PORT 10

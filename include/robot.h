@@ -17,7 +17,7 @@ extern pros::Motor CONVEYOR;
 
 extern pros::Imu imu;
 
-extern pros::ADIDigitalIn selec;
+//extern pros::ADIDigitalIn selec;
 
 extern pros::ADIDigitalOut mogo;
 extern pros::ADIDigitalOut doinker;

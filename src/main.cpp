@@ -3,6 +3,7 @@
 #include "pid.h"
 #include "auton.h"
 #include "odometry.h"
+#include "api.h"
 
 using namespace pros;
 using namespace std;
@@ -66,45 +67,45 @@ void competition_initialize() {
 
 	while(true){
 
-		if(selec.get_value() == true){
-			pressed++;
-		}
+// 		if(selec.get_value() == true){
+// 			pressed++;
+// 		}
 
-		if(selec.get_value() == false){
-			pressed = 0;
-		}
+// 		if(selec.get_value() == false){
+// 			pressed = 0;
+// 		}
 
-		if(pressed  = 1){
-			atn++;
-		}
+// 		if(pressed  = 1){
+// 			atn++;
+// 		}
 
-		if (atn == 0){
-			autstr = "Skills";
-			con.print(0,0, "Aut 0: %s       ", autstr);
+// 		if (atn == 0){
+// 			autstr = "Skills";
+// 			con.print(0,0, "Aut 0: %s       ", autstr);
 
-		} else if (atn == 1){
-			autstr = "NONE";
-			con.print(0,0, "Aut 1: %s       ", autstr);
+// 		} else if (atn == 1){
+// 			autstr = "NONE";
+// 			con.print(0,0, "Aut 1: %s       ", autstr);
 
-	} else if (atn == 2){
-			autstr = "REDL";
-			con.print(0,0, "Aut 2: %s       ", autstr);
-} else if (atn == 3){
-			autstr = "REDR";
-			con.print(0,0, "Aut 3: %s       ", autstr);
-} else if (atn == 4){
-			autstr = "BLUEL";
-			con.print(0,0, "Aut 4: %s       ", autstr);
-		} else if (atn == 5){
-			autstr = "BLUER";
-			con.print(0,0, "Aut 5: %s       ", autstr);
+// 	} else if (atn == 2){
+// 			autstr = "REDL";
+// 			con.print(0,0, "Aut 2: %s       ", autstr);
+// } else if (atn == 3){
+// 			autstr = "REDR";
+// 			con.print(0,0, "Aut 3: %s       ", autstr);
+// } else if (atn == 4){
+// 			autstr = "BLUEL";
+// 			con.print(0,0, "Aut 4: %s       ", autstr);
+// 		} else if (atn == 5){
+// 			autstr = "BLUER";
+// 			con.print(0,0, "Aut 5: %s       ", autstr);
 
-		}else if (atn == 6){
-			atn = 0;
-		}
+// 		}else if (atn == 6){
+// 			atn = 0;
+// 		}
 
-		con.clear();
-	}
+// 		con.clear();
+	//}
 }
 
 /**
@@ -147,7 +148,7 @@ void opcontrol() {
 	
 
 
-		if(selec.get_value() == true){
+		//if(selec.get_value() == true){
 			pressed++;
 		}
 
@@ -186,35 +187,35 @@ void opcontrol() {
 		// }
 
 
-		if(selec.get_value() == false){
-			pressed = 0;
-		}
+// 		if(selec.get_value() == false){
+// 			pressed = 0;
+// 		}
 
-		if(pressed == 1){
-			atn++;
-		}
+// 		if(pressed == 1){
+// 			atn++;
+// 		}
 
-		if (atn == 0){
-			autstr = "NONE";
+// 		if (atn == 0){
+// 			autstr = "NONE";
 
-		} else if (atn == 1){
-			autstr = "Skills";
+// 		} else if (atn == 1){
+// 			autstr = "Skills";
 
-	} else if (atn == 2){
-			autstr = "REDL";
+// 	} else if (atn == 2){
+// 			autstr = "REDL";
 
-} else if (atn == 3){
-			autstr = "REDR";
+// } else if (atn == 3){
+// 			autstr = "REDR";
 
-} else if (atn == 4){
-			autstr = "BLUEL";
+// } else if (atn == 4){
+// 			autstr = "BLUEL";
 
-		} else if (atn == 5){
-			autstr = "BLUER";
+// 		} else if (atn == 5){
+// 			autstr = "BLUER";
 
-		}else if (atn == 6){
-			atn = 0;
-		}
+// 		}else if (atn == 6){
+// 			atn = 0;
+		//}
 
 		prev_imu = curr_imu;
 		curr_imu = imu.get_rotation();
