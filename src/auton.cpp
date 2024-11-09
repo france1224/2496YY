@@ -11,28 +11,78 @@ void autonomous() {
     if(atn==0){
 
     }else if(atn == 1){
-    RingColor = 2;
 
-    bool mogo_toggle2;
+    }else if(atn == 2){//redl
+    		mogo.set_value(false);
+			doinker.set_value(true);
+			delay(1000);
+			driveStraight2(-580);
+			delay(700);
+			driveTurn2(44);
+			delay(800);
+			driveSlow(-800, 80);
+			delay(700);
+			mogo.set_value(true);
+			delay(700);
+			CONVEYOR.move(127);
+		 	delay(700);			
+			driveTurn2(-96);
+			delay(700);
+			driveStraight2(2000);
 
-    driveSlow(-900, 100);
+    }else if(atn == 3){//redr
+    		mogo.set_value(false);
+			doinker.set_value(true);
+			delay(1000);
+			driveStraight2(-580);
+			delay(700);
+			driveTurn2(-44);
+			delay(800);
+			driveSlow(-800, 80);
+			delay(700);
+			mogo.set_value(true);
+			delay(700);
+			CONVEYOR.move(127);
+		 	delay(700);			
+			driveTurn2(96);
+			delay(700);
+			driveStraight2(2000);
 
-    mogo_toggle2 = !mogo_toggle2;
+    }else if(atn == 4){//bluel
+    		mogo.set_value(false);
+			doinker.set_value(true);
+			delay(1000);
+			driveStraight2(-580);
+			delay(700);
+			driveTurn2(-44);
+			delay(800);
+			driveSlow(-780 , 80);
+			delay(700);
+			mogo.set_value(true);
+			delay(700);
+			CONVEYOR.move(127);
+		 	delay(700);			
+			driveTurn2(-96);
+			delay(700);
+			driveStraight2(2000);
 
-    mogo.set_value(mogo_toggle2);
-
-    driveStraight(200);
-
-    mogo_toggle2 = !mogo_toggle2;
-
-    delay(200);
-
-    mogo.set_value(mogo_toggle2);
-
-    }else if(atn == 2){
-
-    }else if(atn == 3){
-
+    }else if(atn == 5){
+			mogo.set_value(false);
+			doinker.set_value(true);
+			delay(1000);
+			driveStraight2(-580);
+			delay(700);
+			driveTurn2(-44);
+			delay(800);
+			driveSlow(-800, 80);
+			delay(700);
+			mogo.set_value(true);
+			delay(700);
+			CONVEYOR.move(127);
+		 	delay(700);			
+			driveTurn2(96);
+			delay(700);
+			driveStraight2(2000);
     }
 
 

@@ -238,7 +238,7 @@ void driveStraight2(int target){
 
     double x = 0;
     x = double(abs(target));
-    timeout = (0.000000000000097017*pow(x,5)) + (-0.00000000055038 * pow(x,4))+ (0.00000106378 * pow(x,3)) + (-0.000841031 * pow(x,2)) + (0.591258 *x) + 311.616;
+   // timeout = (0.000000000000097017*pow(x,5)) + (-0.00000000055038 * pow(x,4))+ (0.00000106378 * pow(x,3)) + (-0.000841031 * pow(x,2)) + (0.591258 *x) + 311.616;
     
 
     double voltage;
@@ -292,17 +292,8 @@ void driveStraight2(int target){
 
         chasMove((voltage+heading_error), (voltage+heading_error), (voltage+heading_error), (voltage-heading_error), (voltage-heading_error), (voltage-heading_error));
 
-        if(target>0){
-            if((encoderAvg - (target-500))>0){
-                over=true;
-            }
-        }else {
-            if(((target+500)-encoderAvg)>0){
-                over = true;
-            }
-        }
-
-        if(over || time2>timeout){
+        if(abs(target - encoderAvg) <= 3) count++;
+        if(count >= 20 || time2 > timeout){
             break;
         }
 
@@ -695,7 +686,7 @@ void driveTurn2(int target) {
     double variKD = 0;
     double x = 0;
     x = double(abs(turnv));
-    variKD = (0.0000000090126*pow(x, 5)) + (-0.00000416039*pow(x,4)) + (0.000710426*pow(x,3)) + (-0.0547395*pow(x,2)) + (1.78519*x) + 29.4532;
+    variKD = (0.00000000901216*pow(x, 5)) + (-0.00000416039*pow(x,4)) + (0.000710426*pow(x,3)) + (-0.0547395*pow(x,2)) + (1.78519*x) + 29.4532;
     setConstants(TURN_KP, TURN_KI, variKD);
 
     timeout = (0.00000013999*pow(x,5)) + (-0.0000662053*pow(x,4)) + (0.0116874*pow(x,3)) + (-0.934041*pow(x,2)) + (35.0169*x) + 157.303;
@@ -732,7 +723,7 @@ void driveTurn2(int target) {
 
         chasMove(voltage, voltage, voltage, -voltage, -voltage, -voltage);
 
-        if (abs(target-position) <= 1.5) count++;
+        if (abs(target-position) <= 0.6) count++;
         if (count >= 20 || time2>timeout){
            break;
         }

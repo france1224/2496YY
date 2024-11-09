@@ -37,22 +37,22 @@ extern int time2;
 
 
 #define STRAIGHT_KP 4
-#define STRAIGHT_KI 0
-#define STRAIGHT_KD 1
+#define STRAIGHT_KI 0.001
+#define STRAIGHT_KD 9
 
 #define STRAIGHT_INTEGRAL_KI 40
 #define STRAIGHT_MAX_INTEGRAL 14.5
 
-#define TURN_KP 7
+#define TURN_KP 6
 #define TURN_KI 0.01
-#define TURN_KD 12
+#define TURN_KD 54
 
 #define TURN_INTEGRAL_KI 30
 #define TURN_MAX_INTEGRAL 25
 
 #define ARC_CORRECTION_KP 30
 
-#define HEADING_KP 4
+#define HEADING_KP 8
 #define HEADING_KI 0
 #define HEADING_KD 0
 

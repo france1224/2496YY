@@ -195,10 +195,10 @@ void opcontrol() {
 		}
 
 		if (atn == 0){
-			autstr = "Skills";
+			autstr = "NONE";
 
 		} else if (atn == 1){
-			autstr = "NONE";
+			autstr = "Skills";
 
 	} else if (atn == 2){
 			autstr = "REDL";
@@ -284,8 +284,9 @@ void opcontrol() {
 	
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_L1)){
-			INTAKE.move_velocity(600);
-			INTAKE.move(127);
+			// INTAKE.move_velocity(600);
+			// INTAKE.move(127);
+			//CONVEYOR.move_velocity(600);
 			CONVEYOR.move(127);
 			forward = 1;
 		} else {
@@ -294,8 +295,9 @@ void opcontrol() {
 
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_L2)){
-			INTAKE.move_velocity(-600);
-			INTAKE.move(-127);
+			// INTAKE.move_velocity(-600);
+			// INTAKE.move(-127);
+			//CONVEYOR.move_velocity(-600);
 			CONVEYOR.move(-127);
 			backward = 1;
 		  }else{
@@ -303,11 +305,28 @@ void opcontrol() {
 		  }
 
 		if(forward + backward == 4){
-			INTAKE.move(0);
+			// INTAKE.move(0);
 			CONVEYOR.move(0);
 		}
 
-		
+		if (con.get_digital(E_CONTROLLER_DIGITAL_X)){
+			    		mogo.set_value(false);
+			doinker.set_value(true);
+			delay(1000);
+			driveStraight2(-580);
+			delay(700);
+			driveTurn2(44);
+			delay(800);
+			driveSlow(-800, 80);
+			delay(700);
+			mogo.set_value(true);
+			delay(700);
+			CONVEYOR.move(127);
+		 	delay(700);			
+			driveTurn2(-96);
+			delay(700);
+			driveStraight2(2000);
+		}
 
 
 		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_R1)){

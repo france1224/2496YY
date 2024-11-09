@@ -3,15 +3,15 @@
 #include "main.h"
 
 //Defines the port so this is the only part that  needs to be changed if the port changes
-#define INTAKE_PORT 20
-#define CONVEYOR_PORT 8
-#define LF_PORT 6
+#define INTAKE_PORT 10
+#define CONVEYOR_PORT 10 
+#define LF_PORT 20
 #define LM_PORT 2
-#define LB_PORT 10
-#define RF_PORT 7
-#define RM_PORT 5
-#define RB_PORT 19
-#define IMU_PORT 21
+#define LB_PORT 3
+#define RF_PORT 5
+#define RM_PORT 12
+#define RB_PORT 1
+#define IMU_PORT 4
 #define OPTICAL_PORT 12
 
 pros::Motor INTAKE (INTAKE_PORT, pros::E_MOTOR_GEARSET_18, false);
@@ -28,10 +28,10 @@ pros::Controller con (pros::E_CONTROLLER_MASTER);
 
 pros::Imu imu (IMU_PORT);
 
-pros::ADIDigitalIn selec ('G');
+//pros::ADIDigitalIn selec ('H');
 
-pros::ADIDigitalOut mogo ('A');
+pros::ADIDigitalOut mogo ('H');
 
-pros::ADIDigitalOut doinker ('H');
+pros::ADIDigitalOut doinker ('C');
 
 pros::Optical OpticalC (OPTICAL_PORT, 10);
