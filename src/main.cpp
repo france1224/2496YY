@@ -67,45 +67,45 @@ void competition_initialize() {
 
 	while(true){
 
-// 		if(selec.get_value() == true){
-// 			pressed++;
-// 		}
+		if(selec.get_value() == true){
+			pressed++;
+		}
 
-// 		if(selec.get_value() == false){
-// 			pressed = 0;
-// 		}
+		if(selec.get_value() == false){
+			pressed = 0;
+		}
 
-// 		if(pressed  = 1){
-// 			atn++;
-// 		}
+		if(pressed == 1){
+			atn++;
+		}
 
-// 		if (atn == 0){
-// 			autstr = "Skills";
-// 			con.print(0,0, "Aut 0: %s       ", autstr);
+		if (atn == 0){
+			autstr = "Skills";
+			con.print(0,0, "Aut 0: %s       ", autstr);
 
-// 		} else if (atn == 1){
-// 			autstr = "NONE";
-// 			con.print(0,0, "Aut 1: %s       ", autstr);
+		} else if (atn == 1){
+			autstr = "NONE";
+			con.print(0,0, "Aut 1: %s       ", autstr);
 
-// 	} else if (atn == 2){
-// 			autstr = "REDL";
-// 			con.print(0,0, "Aut 2: %s       ", autstr);
-// } else if (atn == 3){
-// 			autstr = "REDR";
-// 			con.print(0,0, "Aut 3: %s       ", autstr);
-// } else if (atn == 4){
-// 			autstr = "BLUEL";
-// 			con.print(0,0, "Aut 4: %s       ", autstr);
-// 		} else if (atn == 5){
-// 			autstr = "BLUER";
-// 			con.print(0,0, "Aut 5: %s       ", autstr);
+	} else if (atn == 2){
+			autstr = "REDL";
+			con.print(0,0, "Aut 2: %s       ", autstr);
+} else if (atn == 3){
+			autstr = "REDR";
+			con.print(0,0, "Aut 3: %s       ", autstr);
+} else if (atn == 4){
+			autstr = "BLUEL";
+			con.print(0,0, "Aut 4: %s       ", autstr);
+		} else if (atn == 5){
+			autstr = "BLUER";
+			con.print(0,0, "Aut 5: %s       ", autstr);
 
-// 		}else if (atn == 6){
-// 			atn = 0;
-// 		}
+		}else if (atn == 6){
+			atn = 0;
+		}
 
-// 		con.clear();
-	//}
+		con.clear();
+	}
 }
 
 /**
@@ -139,9 +139,11 @@ void opcontrol() {
 	double prev_imu = 0;
 	double curr_imu = 0;
 	int backward = 0;
-	int forward = 0;
+	int forward;
 	bool mogo_toggle;
 	bool doinker_toggle;
+	bool ladybrown_toggle = false;
+	int macro = 0;
 
     while(true) {
 
@@ -149,8 +151,8 @@ void opcontrol() {
 
 
 		//if(selec.get_value() == true){
-			pressed++;
-		}
+		// 	pressed++;
+		// }
 
 		// switch(atn){
 		// 	case 0:
@@ -282,13 +284,43 @@ void opcontrol() {
 			//	odometry();
 			//	delay(1);
 			//}
+
+		if(con.get_digital(E_CONTROLLER_DIGITAL_R1)){
+			LADYBROWN.move(127);
+			ladybrown_toggle = false;
+		} 
+		else if(con.get_digital(E_CONTROLLER_DIGITAL_R2)){
+			LADYBROWN.move(-127);
+			ladybrown_toggle = false;
+		}else if(ladybrown_toggle){
+
+			if(macro == 0){
+				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD); //set the target!! for all
+				LADYBROWN.move(calcPID(10, roto.get_position(), 0, 0));
+			}	else if (macro == 1){
+				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
+				LADYBROWN.move(calcPID(100, roto.get_position(), 0, 0));
+			}	else if(macro == 2){
+				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
+				LADYBROWN.move(calcPID(1000, roto.get_position(), 0, 0));
+			}	else{
+				macro = 0;
+			}
+			} else {
+				LADYBROWN.move(0);
+			}
+
+			if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_UP)){
+				ladybrown_toggle = true;
+				macro++;
+			}
 	
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_L1)){
 			// INTAKE.move_velocity(600);
 			// INTAKE.move(127);
 			//CONVEYOR.move_velocity(600);
-			CONVEYOR.move(127);
+			CONVEYOR.move(115);
 			forward = 1;
 		} else {
 			forward = 2;
@@ -299,7 +331,7 @@ void opcontrol() {
 			// INTAKE.move_velocity(-600);
 			// INTAKE.move(-127);
 			//CONVEYOR.move_velocity(-600);
-			CONVEYOR.move(-127);
+			CONVEYOR.move(-115);
 			backward = 1;
 		  }else{
 			backward = 2;

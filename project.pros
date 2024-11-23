@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "code",
+    "project_name": "PLAY THIS",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -167,7 +167,9 @@
       }
     },
     "upload_options": {
-      "description": "send "
+      "description": "send ",
+      "slot": 1,
+      "icon": "pros"
     },
     "use_early_access": false
   }

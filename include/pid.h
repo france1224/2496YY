@@ -66,4 +66,19 @@ extern int time2;
 #define ARC_HEADING_INTEGRAL_KI 0
 #define ARC_HEADING_MAX_INTEGRAL 0
 
+//tune for lady brown
+
+//more vertical (maco 0/1 etc)
+#define LADYBROWN_KP 0
+#define LADYBROWN_KD 0
+#define LADYBROWN_KI 0
+
+//more horizontal (macro 2/3)
+#define LADYBROWN_KP2 0
+#define LADYBROWN_KD2 0
+#define LADYBROWN_KI2 0
+
+#define LADYBROWN_INTEGRAL_KI 0
+#define LADYBROWN_MAX_INTEGRAL 0
+
 #endif

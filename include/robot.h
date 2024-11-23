@@ -16,8 +16,10 @@ extern pros::Motor INTAKE;
 extern pros::Motor CONVEYOR;
 
 extern pros::Imu imu;
+extern pros::Rotation roto;
+extern pros:: Motor LADYBROWN;
 
-//extern pros::ADIDigitalIn selec;
+extern pros::ADIDigitalIn selec;
 
 extern pros::ADIDigitalOut mogo;
 extern pros::ADIDigitalOut doinker;

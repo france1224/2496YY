@@ -16,6 +16,8 @@
 #define RB_PORT 1
 #define IMU_PORT 4
 #define OPTICAL_PORT 12
+#define LADYBROWN_PORT 12
+#define ROTO_PORT 15
 
 pros::Motor INTAKE (INTAKE_PORT, pros::E_MOTOR_GEARSET_18, false);
 pros::Motor CONVEYOR (CONVEYOR_PORT, pros::E_MOTOR_GEARSET_18, true);
@@ -27,7 +29,10 @@ pros::Motor RF (RF_PORT, pros::E_MOTOR_GEARSET_06, false);
 pros::Motor RM (RM_PORT, pros::E_MOTOR_GEARSET_06, true);
 pros::Motor RB (RB_PORT, pros::E_MOTOR_GEARSET_06, false);
 
+pros::Motor LadyBrown (LADYBROWN_PORT, pros::E_MOTOR_GEARSET_06, true);
 pros::Controller con (pros::E_CONTROLLER_MASTER);
+
+pros::Rotation roto (ROTO_PORT);
 
 pros::Imu imu (IMU_PORT);
 
