@@ -135,6 +135,7 @@ void competition_initialize() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	double ladybrown_angle = 0;
 	int time = 0;
 	double prev_imu = 0;
 	double curr_imu = 0;
@@ -189,35 +190,35 @@ void opcontrol() {
 		// }
 
 
-// 		if(selec.get_value() == false){
-// 			pressed = 0;
-// 		}
+		if(selec.get_value() == false){
+			pressed = 0;
+		}
 
-// 		if(pressed == 1){
-// 			atn++;
-// 		}
+		if(pressed == 1){
+			atn++;
+		}
 
-// 		if (atn == 0){
-// 			autstr = "NONE";
+		if (atn == 0){
+			autstr = "NONE";
 
-// 		} else if (atn == 1){
-// 			autstr = "Skills";
+		} else if (atn == 1){
+			autstr = "Skills";
 
-// 	} else if (atn == 2){
-// 			autstr = "REDL";
+	} else if (atn == 2){
+			autstr = "REDL";
 
-// } else if (atn == 3){
-// 			autstr = "REDR";
+} else if (atn == 3){
+			autstr = "REDR";
 
-// } else if (atn == 4){
-// 			autstr = "BLUEL";
+} else if (atn == 4){
+			autstr = "BLUEL";
 
-// 		} else if (atn == 5){
-// 			autstr = "BLUER";
+		} else if (atn == 5){
+			autstr = "BLUER";
 
-// 		}else if (atn == 6){
-// 			atn = 0;
-		//}
+		}else if (atn == 6){
+			atn = 0;
+		}
 
 		prev_imu = curr_imu;
 		curr_imu = imu.get_rotation();
@@ -288,10 +289,12 @@ void opcontrol() {
 		if(con.get_digital(E_CONTROLLER_DIGITAL_R1)){
 			LADYBROWN.move(127);
 			ladybrown_toggle = false;
+			ladybrown_angle = LadyBrown1.get_position();
 		} 
 		else if(con.get_digital(E_CONTROLLER_DIGITAL_R2)){
 			LADYBROWN.move(-127);
 			ladybrown_toggle = false;
+			ladybrown_angle = LadyBrown1.get_position();
 		}else if(ladybrown_toggle){
 
 			if(macro == 0){
@@ -307,7 +310,8 @@ void opcontrol() {
 				macro = 0;
 			}
 			} else {
-				LADYBROWN.move(0);
+				setConstants(LADYBROWNHOLD_KP, LADYBROWNHOLD_KI, LADYBROWNHOLD_KD);
+				LADYBROWN.move(calcPID(ladybrown_angle, LadyBrown1.get_position(), 0, 0));
 			}
 
 			if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_UP)){

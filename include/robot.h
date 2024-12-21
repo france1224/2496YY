@@ -17,7 +17,9 @@ extern pros::Motor CONVEYOR;
 
 extern pros::Imu imu;
 extern pros::Rotation roto;
-extern pros:: Motor LADYBROWN;
+extern pros:: Motor_Group LADYBROWN;
+extern pros::Motor LadyBrown1;
+extern pros::Motor LadyBrown2;
 
 extern pros::ADIDigitalIn selec;
 

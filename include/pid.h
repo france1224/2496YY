@@ -81,4 +81,17 @@ extern int time2;
 #define LADYBROWN_INTEGRAL_KI 0
 #define LADYBROWN_MAX_INTEGRAL 0
 
+//more vertical (maco 0/1 etc)
+#define LADYBROWNHOLD_KP 0
+#define LADYBROWNHOLD_KD 0
+#define LADYBROWNHOLD_KI 0
+
+//more horizontal (macro 2/3)
+#define LADYBROWNHOLD_KP2 0
+#define LADYBROWNHOLD_KD2 0
+#define LADYBROWNHOLD_KI2 0
+
+#define LADYBROWNHOLD_INTEGRAL_KI 0
+#define LADYBROWNHOLD_MAX_INTEGRAL 0
+
 #endif
