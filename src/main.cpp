@@ -223,11 +223,11 @@ void opcontrol() {
 		prev_imu = curr_imu;
 		curr_imu = imu.get_rotation();
 		if(time %50 == 0 && time %100 != 0 && time % 150 != 0){
-			con.print(0,0, "intake: %f        ", bool(forward));
+			con.print(0, 0, "Auton: %s      ", autstr);
 		} else if (time % 50 == 0 && time % 100 != 0){
 			con.print(1, 0, "Imu: %f       ", float(imu.get_heading()));
 		} else if (time % 50 == 0){
-			con.print(2, 0, "Auton: %s      ", autstr);
+			con.print(2,0, "time: %f     ", int(time2));
 		}
 		int power = con.get_analog(ANALOG_LEFT_Y);
 		int RX = con.get_analog(ANALOG_RIGHT_X);
@@ -286,6 +286,11 @@ void opcontrol() {
 			//	delay(1);
 			//}
 
+			if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_UP)){
+				ladybrown_toggle = true;
+				macro++;
+			}
+
 		if(con.get_digital(E_CONTROLLER_DIGITAL_R1)){
 			LADYBROWN.move(127);
 			ladybrown_toggle = false;
@@ -299,13 +304,13 @@ void opcontrol() {
 
 			if(macro == 0){
 				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD); //set the target!! for all
-				LADYBROWN.move(calcPID(10, roto.get_position(), 0, 0));
+				LADYBROWN.move(calcPID(35100, roto.get_position(), 0, 0));
 			}	else if (macro == 1){
-				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
-				LADYBROWN.move(calcPID(100, roto.get_position(), 0, 0));
+				setConstants(LADYBROWN_KP2, LADYBROWN_KI2, LADYBROWN_KD2);
+				LADYBROWN.move(calcPID(32273, roto.get_position(), 0, 0));
 			}	else if(macro == 2){
 				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
-				LADYBROWN.move(calcPID(1000, roto.get_position(), 0, 0));
+				LADYBROWN.move(calcPID(22886, roto.get_position(), 0, 0));
 			}	else{
 				macro = 0;
 			}
@@ -314,17 +319,14 @@ void opcontrol() {
 				LADYBROWN.move(calcPID(ladybrown_angle, LadyBrown1.get_position(), 0, 0));
 			}
 
-			if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_UP)){
-				ladybrown_toggle = true;
-				macro++;
-			}
+
 	
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_L1)){
 			// INTAKE.move_velocity(600);
 			// INTAKE.move(127);
 			//CONVEYOR.move_velocity(600);
-			CONVEYOR.move(115);
+			CONVEYOR.move(127);
 			forward = 1;
 		} else {
 			forward = 2;
@@ -335,7 +337,7 @@ void opcontrol() {
 			// INTAKE.move_velocity(-600);
 			// INTAKE.move(-127);
 			//CONVEYOR.move_velocity(-600);
-			CONVEYOR.move(-115);
+			CONVEYOR.move(-127);
 			backward = 1;
 		  }else{
 			backward = 2;
@@ -347,31 +349,16 @@ void opcontrol() {
 		}
 
 		if (con.get_digital(E_CONTROLLER_DIGITAL_X)){
-			    		mogo.set_value(false);
-			doinker.set_value(true);
-			delay(1000);
-			driveStraight2(-580);
-			delay(700);
-			driveTurn2(44);
-			delay(800);
-			driveSlow(-800, 80);
-			delay(700);
-			mogo.set_value(true);
-			delay(700);
-			CONVEYOR.move(127);
-		 	delay(700);			
-			driveTurn2(-96);
-			delay(700);
-			driveStraight2(2000);
+			driveStraight(1750);
 		}
 
 
-		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_R1)){
+		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_A)){
 			mogo.set_value(mogo_toggle);
 			mogo_toggle = !mogo_toggle;
 		}
 		
-		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_R2)){
+		if(con.get_digital_new_press(E_CONTROLLER_DIGITAL_B)){
 			doinker.set_value(doinker_toggle);
 			doinker_toggle = !doinker_toggle;
 		}

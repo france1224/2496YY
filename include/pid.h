@@ -7,7 +7,7 @@
 extern void driveStraight(int target);
 extern void driveTurn(int target);
 extern void driveTurn2(int target);
-extern void driveStraight2(int target);
+extern void driveStraight2(int target, int speed=100, int clampDistance=-1);
 extern void driveStraightC(int target);
 
 extern void driveArcL(double theta, double radius, int timeout);
@@ -36,16 +36,16 @@ extern int time2;
 
 
 
-#define STRAIGHT_KP 4
-#define STRAIGHT_KI 0.001
-#define STRAIGHT_KD 9
+#define STRAIGHT_KP 1.2
+#define STRAIGHT_KI 0.5
+#define STRAIGHT_KD 7
 
 #define STRAIGHT_INTEGRAL_KI 40
 #define STRAIGHT_MAX_INTEGRAL 14.5
 
-#define TURN_KP 6
-#define TURN_KI 0.01
-#define TURN_KD 54
+#define TURN_KP 5
+#define TURN_KI 0.001
+#define TURN_KD 57
 
 #define TURN_INTEGRAL_KI 30
 #define TURN_MAX_INTEGRAL 25
@@ -69,25 +69,25 @@ extern int time2;
 //tune for lady brown
 
 //more vertical (maco 0/1 etc)
-#define LADYBROWN_KP 0
-#define LADYBROWN_KD 0
+#define LADYBROWN_KP 0.01
+#define LADYBROWN_KD 10
 #define LADYBROWN_KI 0
 
 //more horizontal (macro 2/3)
-#define LADYBROWN_KP2 0
-#define LADYBROWN_KD2 0
+#define LADYBROWN_KP2 0.025
+#define LADYBROWN_KD2 10000
 #define LADYBROWN_KI2 0
 
 #define LADYBROWN_INTEGRAL_KI 0
 #define LADYBROWN_MAX_INTEGRAL 0
 
 //more vertical (maco 0/1 etc)
-#define LADYBROWNHOLD_KP 0
+#define LADYBROWNHOLD_KP 1
 #define LADYBROWNHOLD_KD 0
 #define LADYBROWNHOLD_KI 0
 
 //more horizontal (macro 2/3)
-#define LADYBROWNHOLD_KP2 0
+#define LADYBROWNHOLD_KP2 1
 #define LADYBROWNHOLD_KD2 0
 #define LADYBROWNHOLD_KI2 0
 

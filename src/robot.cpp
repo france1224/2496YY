@@ -6,19 +6,19 @@
 #include "pid.h"     
 
 //Defines the port so this is the only part that  needs to be changed if the port changes
-#define INTAKE_PORT 10
-#define CONVEYOR_PORT 10 
-#define LF_PORT 20
-#define LM_PORT 2
-#define LB_PORT 3
-#define RF_PORT 5
-#define RM_PORT 12
-#define RB_PORT 1
-#define IMU_PORT 4
+#define INTAKE_PORT 4
+#define CONVEYOR_PORT 1 
+#define LF_PORT 3
+#define LM_PORT 8
+#define LB_PORT 2
+#define RF_PORT 17
+#define RM_PORT 19
+#define RB_PORT 11
+#define IMU_PORT 9
 #define OPTICAL_PORT 12
-#define LADYBROWN_PORT 12
-#define LADYBROWN_PORT2 12
-#define ROTO_PORT 15
+#define LADYBROWN_PORT 10
+#define LADYBROWN_PORT2 7
+#define ROTO_PORT 20
 
 pros::Motor INTAKE (INTAKE_PORT, pros::E_MOTOR_GEARSET_18, false);
 pros::Motor CONVEYOR (CONVEYOR_PORT, pros::E_MOTOR_GEARSET_18, true);
@@ -39,7 +39,7 @@ pros::Rotation roto (ROTO_PORT);
 
 pros::Imu imu (IMU_PORT);
 
-//pros::ADIDigitalIn selec ('H');
+pros::ADIDigitalIn selec ('H');
 
 pros::ADIDigitalOut mogo ('H');
 
