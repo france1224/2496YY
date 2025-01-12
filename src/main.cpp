@@ -307,7 +307,7 @@ void opcontrol() {
 				LADYBROWN.move(calcPID(35100, roto.get_position(), 0, 0));
 			}	else if (macro == 1){
 				setConstants(LADYBROWN_KP2, LADYBROWN_KI2, LADYBROWN_KD2);
-				LADYBROWN.move(calcPID(32273, roto.get_position(), 0, 0));
+				LADYBROWN.move(calcPID(31800, roto.get_position(), 0, 0));
 			}	else if(macro == 2){
 				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
 				LADYBROWN.move(calcPID(22886, roto.get_position(), 0, 0));
@@ -337,7 +337,7 @@ void opcontrol() {
 			// INTAKE.move_velocity(-600);
 			// INTAKE.move(-127);
 			//CONVEYOR.move_velocity(-600);
-			CONVEYOR.move(-127);
+			CONVEYOR.move(-115);
 			backward = 1;
 		  }else{
 			backward = 2;
@@ -349,7 +349,12 @@ void opcontrol() {
 		}
 
 		if (con.get_digital(E_CONTROLLER_DIGITAL_X)){
-			driveStraight(1750);
+			driveStraight2(-200, 50);
+			delay(500);
+			mogo.set_value(true);
+			delay(500);
+			CONVEYOR.move(115);
+			
 		}
 
 

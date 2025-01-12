@@ -36,7 +36,7 @@ extern int time2;
 
 
 
-#define STRAIGHT_KP 1.2
+#define STRAIGHT_KP 1.3
 #define STRAIGHT_KI 0.5
 #define STRAIGHT_KD 7
 
