@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "8838A",
+    "project_name": "BLUEL",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -167,8 +167,8 @@
       }
     },
     "upload_options": {
-      "description": "send ",
-      "slot": 1,
+      "description": "My PROS Project",
+      "slot": 5,
       "icon": "pros"
     },
     "use_early_access": false

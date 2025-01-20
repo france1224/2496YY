@@ -291,7 +291,7 @@ void driveStraight2(int target, int speed, int clampDistance){
         chasMove((voltage+heading_error), (voltage+heading_error), (voltage+heading_error), (voltage-heading_error), (voltage-heading_error), (voltage-heading_error));
 
         if(abs(target - encoderAvg) <= 3) count++;
-        if(count >= 20 || time2 > timeout){
+        if(count >= 24 || time2 > timeout){
           break;
         }
 
@@ -712,7 +712,7 @@ void driveTurn(int target) {
         chasMove(voltage, voltage, voltage, -voltage, -voltage, -voltage);
 
         if (abs(target-position) <= 1.5) count++;
-        if (count >= 20 || time2>timeout){
+        if (count >= 40 || time2>timeout){
         break;
         }
         if (time2%50==0){
@@ -809,7 +809,7 @@ void driveTurn2(int target) {
         chasMove(voltage, voltage, voltage, -voltage, -voltage, -voltage);
 
         if (abs(target-position) <= 0.6) count++;
-        if (count >= 20 || time2>timeout){
+        if (count >= 40 || time2>timeout){
            break;
         }
         if (time2%50==0){
@@ -983,7 +983,7 @@ void driveArcR (double theta, double radius, int timeout){
 void driveArcLF (double theta, double radius, int timeout){
     setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
 
-
+    int trueTheta = theta;
     double ltarget = 0;
     double rtarget = 0;
     double ltargetFinal = 0;
@@ -994,6 +994,7 @@ void driveArcLF (double theta, double radius, int timeout){
     int count = 0;
     time2 = 0;
     resetEncoders();
+    double leftcorrect = 0;
 
     if(init_heading>180){
         init_heading = init_heading - 360;
@@ -1015,13 +1016,13 @@ void driveArcLF (double theta, double radius, int timeout){
             position = position - 360;
         }
 
-        if((init_heading<0)&&(position>0)){
-            if((position - init_heading) >= 180){
+        if(((init_heading+leftcorrect)<0)&&(position>0)){
+            if((position - (init_heading+leftcorrect)) >= 180){
                 init_heading = init_heading +360;
                 position = imu.get_heading();
             }
-        }else if ((init_heading > 0) && (position < 0)){
-            if((init_heading - position) >= 180){
+        }else if (((init_heading+leftcorrect) > 0) && (position < 0)){
+            if(((init_heading+leftcorrect) - position) >= 180){
                 position = imu.get_heading();
             }
         }
@@ -1043,22 +1044,26 @@ void driveArcLF (double theta, double radius, int timeout){
             voltageR = -127;
         }
 
-        double leftcorrect = (encoderAvgL *360)/(2*pi*radius);
+        leftcorrect = (encoderAvgL *360)/(2*pi*radius);
         setConstants(ARC_HEADING_KP, ARC_HEADING_KI, ARC_HEADING_KD);
         int fix = calcPID3((init_heading-leftcorrect), position, ARC_HEADING_INTEGRAL_KI, ARC_HEADING_MAX_INTEGRAL);
         
 
         chasMove((voltageL + fix), (voltageL + fix), (voltageL + fix), (voltageR - fix), (voltageR - fix), (voltageR - fix));
         
-        if(theta > 0){
-            if((encoderAvgL - ltargetFinal)>0){
-                over = true;
-            }
-        }else {
-            if((ltargetFinal - encoderAvgL)> 0){
-                over = true;
-            }
+        if(abs((init_heading - position)) > trueTheta){
+            over = true;
         }
+        
+        // if(theta > 0){
+        //     if((encoderAvgL - ltargetFinal)>0){
+        //         over = true;
+        //     }
+        // }else {
+        //     if((ltargetFinal - encoderAvgL)> 0){
+        //         over = true;
+        //     }
+        // }
         if (over || time2 > timeout){
             break;
         }
@@ -1080,7 +1085,7 @@ void driveArcLF (double theta, double radius, int timeout){
 
 void driveArcRF (double theta, double radius, int timeout){
  
-
+    double trueTheta = theta;
     double ltarget = 0;
     double rtarget = 0;
     double ltargetFinal = 0;
@@ -1091,6 +1096,7 @@ void driveArcRF (double theta, double radius, int timeout){
     int count = 0;
     time2 = 0;
     resetEncoders();
+    double rightcorrect = 0;
 
     ltargetFinal = double((theta/360) * 2 * pi * (radius+750));
     rtargetFinal = double((theta/360) * 2 * pi * radius);
@@ -1108,13 +1114,13 @@ void driveArcRF (double theta, double radius, int timeout){
             position = position - 360;
         }
 
-        if((init_heading<0)&&(position>0)){
-            if((position - init_heading) >= 180){
+        if(((init_heading +rightcorrect<0))&&(position>0)){
+            if((position - (init_heading+rightcorrect)) >= 180){
                 init_heading = init_heading +360;
                 position = imu.get_heading();
             }
-        }else if ((init_heading > 0) && (position < 0)){
-            if((init_heading - position) >= 180){
+        }else if (((init_heading+rightcorrect) > 0) && (position < 0)){
+            if(((init_heading+rightcorrect) - position) >= 180){
                 position = imu.get_heading();
             }
         }
@@ -1136,21 +1142,25 @@ void driveArcRF (double theta, double radius, int timeout){
             voltageR = -127;
         }
 
-        double rightcorrect = (encoderAvgR *360)/(2*pi*radius);
+        rightcorrect = (encoderAvgR *360)/(2*pi*radius);
         setConstants(ARC_HEADING_KP, ARC_HEADING_KI, ARC_HEADING_KD);
         int fix = calcPID3((init_heading+rightcorrect), position, ARC_HEADING_INTEGRAL_KI, ARC_HEADING_MAX_INTEGRAL);
 
-        chasMove((voltageL - fix), (voltageL - fix), (voltageL - fix), (voltageR + fix), (voltageR + fix), (voltageR + fix));
+        chasMove((voltageL + fix), (voltageL + fix), (voltageL + fix), (voltageR - fix), (voltageR - fix), (voltageR - fix));
         
-        if(theta>0){
-            if((encoderAvgR - (rtargetFinal)) > 0){
-                over = true;
-            }
-        }else{
-            if(((rtargetFinal) - encoderAvgR) > 0){
-                over = true;
-            }
+        if(abs((init_heading - position)) > trueTheta){
+            over = true;
         }
+
+        // if(theta>0){
+        //     if((encoderAvgR - (rtargetFinal)) > 0){
+        //         over = true;
+        //     }
+        // }else{
+        //     if(((rtargetFinal) - encoderAvgR) > 0){
+        //         over = true;
+        //     }
+        // }
 
         if (over || time2>timeout){
             break;

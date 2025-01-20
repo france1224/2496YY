@@ -9,22 +9,23 @@ using namespace std;
 using namespace pros;
 void autonomous() {
 
-			driveTurn2(-30);
-			driveStraight2(-1160, 25);
+			driveStraight2(-700);
 			delay(500);
-			//driveStraight2(-200, 25);
+			driveTurn2(21);
 			delay(500);
+			driveStraight2(-400, 25);
+			delay(700);
 			mogo.set_value(true);
 			delay(500);
-			driveStraight2(300);
-			delay(500);
-			driveStraight2(-300);
-			delay(500);
+			// driveStraight2(300);
+			// delay(500);
+			// driveStraight2(-300);
+			// delay(500);
 			CONVEYOR.move(127);
 			delay(1000);
 			CONVEYOR.brake();
 			delay(500);
-			driveTurn2(-110);
+			driveTurn2(100);
 			delay(500);
 		    CONVEYOR.move(110);
 			delay(100);
@@ -33,6 +34,40 @@ void autonomous() {
 			CONVEYOR.move(110); 
 			delay(2000);
 			CONVEYOR.brake();
+			delay(500);
+			driveTurn2(-190);
+			delay(700);
+			driveStraight2(5000);
+
+
+
+			// driveTurn2(30);
+			// driveStraight2(-1160, 25);
+			// delay(500);
+			// //driveStraight2(-200, 25);
+			// delay(500);
+			// mogo.set_value(true);
+			// delay(500);
+			// driveStraight2(300);
+			// delay(500);
+			// driveStraight2(-300);
+			// delay(500);
+			// CONVEYOR.move(127);
+			// delay(1000);
+			// CONVEYOR.brake();
+			// delay(500);
+			// driveTurn2(110);
+			// delay(500);
+		    // CONVEYOR.move(110);
+			// delay(100);
+			// driveStraight(600);
+			// delay(500);
+			// CONVEYOR.move(110); 
+			// delay(2000);
+			// CONVEYOR.brake();
+			// delay(500);
+			// driveTurn2(-90);
+			// driveStraight2(1000);
 
     // if(atn==0){
 

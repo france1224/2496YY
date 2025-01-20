@@ -292,31 +292,31 @@ void opcontrol() {
 			}
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_R1)){
-			LADYBROWN.move(127);
+			LadyBrown1.move(127);
 			ladybrown_toggle = false;
 			ladybrown_angle = LadyBrown1.get_position();
 		} 
 		else if(con.get_digital(E_CONTROLLER_DIGITAL_R2)){
-			LADYBROWN.move(-127);
+			LadyBrown1.move(-127);
 			ladybrown_toggle = false;
 			ladybrown_angle = LadyBrown1.get_position();
 		}else if(ladybrown_toggle){
 
 			if(macro == 0){
 				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD); //set the target!! for all
-				LADYBROWN.move(calcPID(35100, roto.get_position(), 0, 0));
+				LadyBrown1.move(calcPID(149, roto.get_position(), 0, 0));
 			}	else if (macro == 1){
 				setConstants(LADYBROWN_KP2, LADYBROWN_KI2, LADYBROWN_KD2);
-				LADYBROWN.move(calcPID(31800, roto.get_position(), 0, 0));
+				LadyBrown1.move(calcPID(3300, roto.get_position(), 0, 0));
 			}	else if(macro == 2){
 				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
-				LADYBROWN.move(calcPID(22886, roto.get_position(), 0, 0));
+				LadyBrown1.move(calcPID(13675, roto.get_position(), 0, 0));
 			}	else{
 				macro = 0;
 			}
 			} else {
 				setConstants(LADYBROWNHOLD_KP, LADYBROWNHOLD_KI, LADYBROWNHOLD_KD);
-				LADYBROWN.move(calcPID(ladybrown_angle, LadyBrown1.get_position(), 0, 0));
+				LadyBrown1.move(calcPID(ladybrown_angle, LadyBrown1.get_position(), 0, 0));
 			}
 
 
@@ -349,11 +349,7 @@ void opcontrol() {
 		}
 
 		if (con.get_digital(E_CONTROLLER_DIGITAL_X)){
-			driveStraight2(-200, 50);
-			delay(500);
-			mogo.set_value(true);
-			delay(500);
-			CONVEYOR.move(115);
+			driveTurn2(90);
 			
 		}
 
