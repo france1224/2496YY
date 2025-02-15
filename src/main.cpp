@@ -307,7 +307,7 @@ void opcontrol() {
 				LadyBrown1.move(calcPID(149, roto.get_position(), 0, 0));
 			}	else if (macro == 1){
 				setConstants(LADYBROWN_KP2, LADYBROWN_KI2, LADYBROWN_KD2);
-				LadyBrown1.move(calcPID(3300, roto.get_position(), 0, 0));
+				LadyBrown1.move(calcPID(3600, roto.get_position(), 0, 0));
 			}	else if(macro == 2){
 				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
 				LadyBrown1.move(calcPID(13675, roto.get_position(), 0, 0));
@@ -337,7 +337,7 @@ void opcontrol() {
 			// INTAKE.move_velocity(-600);
 			// INTAKE.move(-127);
 			//CONVEYOR.move_velocity(-600);
-			CONVEYOR.move(-115);
+			CONVEYOR.move(-127);
 			backward = 1;
 		  }else{
 			backward = 2;

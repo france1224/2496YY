@@ -34,6 +34,10 @@ extern void MOGO(bool mogo_toggle);
 
 extern int time2;
 
+extern int lbmove;
+
+
+
 
 
 #define STRAIGHT_KP 1.3

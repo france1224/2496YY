@@ -43,6 +43,8 @@ pros::ADIDigitalIn selec ('C');
 
 pros::ADIDigitalOut mogo ('A');
 
+pros::ADIDigitalOut colorsort ('B');
+
 pros::ADIDigitalOut doinker ('H');
 
 pros::Optical OpticalC (OPTICAL_PORT, 10);

@@ -24,6 +24,7 @@ extern pros::Motor LadyBrown2;
 extern pros::ADIDigitalIn selec;
 
 extern pros::ADIDigitalOut mogo;
+extern pros::ADIDigitalOut colorsort;
 extern pros::ADIDigitalOut doinker;
 
 extern pros::Optical OpticalC;

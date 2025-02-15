@@ -7,11 +7,15 @@
 
 using namespace std;
 using namespace pros;
+
 void autonomous() {
+
+	//example of lb macro thingy
+	lbmove==1; //picks position
 
 			driveStraight2(-700);
 			delay(500);
-			driveTurn2(21);
+			driveTurn2(-21);
 			delay(500);
 			driveStraight2(-400, 25);
 			delay(700);
@@ -25,7 +29,7 @@ void autonomous() {
 			delay(1000);
 			CONVEYOR.brake();
 			delay(500);
-			driveTurn2(100);
+			driveTurn2(-112);
 			delay(500);
 		    CONVEYOR.move(110);
 			delay(100);
@@ -35,9 +39,9 @@ void autonomous() {
 			delay(2000);
 			CONVEYOR.brake();
 			delay(500);
-			driveTurn2(-190);
-			delay(700);
-			driveStraight2(5000);
+			// driveTurn2(-180);
+			// delay(700);
+			// driveStraight2(5000);
 
 
 

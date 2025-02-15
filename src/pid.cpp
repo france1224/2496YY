@@ -9,6 +9,8 @@ using namespace pros;
 using namespace c; 
 using namespace std;
 
+int lbmove;
+
 double vKp;
 double vKi;
 double vKd;
@@ -42,6 +44,17 @@ int derivative3;
 int time23;
 double power3;
 
+double vKp4;
+double vKi4;
+double vKd4;
+float error4; //the distance from the target
+double prevPower4;
+double prevError4;
+int integral4;
+int derivative4;
+int time24;
+double power4;
+
 
 
 void setConstants (double kp, double ki, double kd) {
@@ -69,6 +82,8 @@ void chasMove(int voltageLF, int voltageLB, int voltageLM, int voltageRF, int vo
 }
 
 double calcPID(double target, double input, int integralKi, int maxIntegral){
+    LadyBrownMove();
+    ColorSort2();
     int integral;
     prevError = error;
     error = target-input;
@@ -85,6 +100,7 @@ double calcPID(double target, double input, int integralKi, int maxIntegral){
         integral = max(integral, -maxIntegral);
     }
 
+    //if (errorxpreError <= 0){ integral = 0;}
     derivative = error - prevError;
 
     power = (vKp * error) + (vKi*integral) + (vKd * derivative);
@@ -140,6 +156,137 @@ double calcPID3(double target, double input, int integralKi, int maxIntegral){
 
 }
 
+double calcPID4(double target, double input, int integralKi, int maxIntegral){
+    int integral4;
+    prevError4 = error4;
+    error4 = target-input;
+
+    if(abs(error4) < integralKi) {
+        integral4 += error4;
+    } else {
+        integral4 = 0;
+    }
+
+    if(integral4>=0) {
+        integral4 = min(integral4, maxIntegral);
+    } else {
+        integral4 = max(integral4, -maxIntegral);
+    }
+
+    derivative4 = error4 - prevError4;
+
+    power4 = (vKp * error4) + (vKi*integral4) + (vKd * derivative4);
+    return power4;
+
+}
+
+
+bool InitColor = false;
+int ColorCount;
+bool Backwards = false;
+  
+//void ColorSort (int color){
+//     if(color==0){// blue rejection
+//         if(OpticalC.get_hue()<240 && OpticalC.get_hue()>180){
+//             InitColor = true; 
+//         }
+  
+//         if(InitColor){
+
+//             if( Backwards == false){
+//                 INTAKE.move(127);
+            
+//                  if(INTAKE.get_position() > 500){
+//                 Backwards = true;
+//                  }
+//             }else {
+//                 INTAKE.move(-127);
+//                 if(INTAKE.get_position() < 200){
+//                     Backwards = false;
+//                     InitColor = false; 
+//                 }
+//             }
+//         }else {
+//             INTAKE.move(127);
+//             INTAKE.tare_position();
+//         }
+
+
+//     }else if(color==1){ // red rejection
+//         if(OpticalC.get_hue()>0 && OpticalC.get_hue()<40){
+//             InitColor = true;
+//         }
+//         if(InitColor){
+
+//             if( Backwards == false){
+//                 INTAKE.move(127);
+            
+//                  if(INTAKE.get_position() > 500){
+//                 Backwards = true;
+//                  }
+//             }else {
+//                 INTAKE.move(-127);
+//                 if(INTAKE.get_position() < 200){
+//                     Backwards = false;
+//                     InitColor = false; 
+//                 }
+//             }
+//         }else {
+//             INTAKE.move(127);
+//             INTAKE.tare_position();
+//         }
+//         }
+// }
+
+int ColorCount = 0;
+bool colorSwitch = false;
+void ColorSort2 (){
+    if(RingColor==1){//red reject
+        if(OpticalC.get_hue() < 30 || OpticalC.get_hue() > 330){
+            colorSwitch = true;
+        }
+        if (colorSwitch == true && ColorCount < 1000){
+                colorsort.set_value(true);
+                //ColorCount++;
+                ColorCount+=10;
+        }else{
+            colorSwitch = false;
+            ColorCount = 0;
+        }
+    }else if (RingColor == 2){//blue reject
+        if(OpticalC.get_hue()<260 && OpticalC.get_hue() > 180){
+            colorSwitch = true;
+        }        if (colorSwitch == true && ColorCount < 1000){
+            colorsort.set_value(true);
+            //ColorCount++;
+            ColorCount+=10;
+    }else{
+        colorSwitch = false;
+        ColorCount = 0;
+    }
+    }
+
+}
+
+
+void LadyBrownMove (){
+    if (lbmove == 1){
+        setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
+        LadyBrown1.move(calcPID4(12345, roto.get_position(), 0,0));
+    }else if(lbmove == 2){
+        setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
+        LadyBrown1.move(calcPID4(2345, roto.get_position(), 0,0));
+    }else if(lbmove == 3){
+         setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
+         LadyBrown1.move(calcPID4(1235, roto.get_position(), 0,0));
+    }else if(lbmove == 4){
+        setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
+        LadyBrown1.move(calcPID4(1345, roto.get_position(), 0,0));
+    }
+    
+}
+
+
 
 void driveStraight(int target){
     int timeout = 30000;
@@ -167,7 +314,7 @@ void driveStraight(int target){
 
     while(true){
 
-        ColorSort(RingColor);
+        //ColorSort(RingColor);
 
         encoderAvg = (LF.get_position()+RF.get_position()) / 2;
         setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
@@ -253,7 +400,7 @@ void driveStraight2(int target, int speed, int clampDistance){
 
     while(true){
 
-        ColorSort(RingColor);
+        //ColorSort(RingColor);
         encoderAvg = (LF.get_position()+RF.get_position()) / 2;
         setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
         voltage = calcPID(target, encoderAvg, STRAIGHT_INTEGRAL_KI, STRAIGHT_MAX_INTEGRAL);
@@ -344,7 +491,7 @@ void driveStraight2(int target, int speed, int clampDistance){
 
 //     while(true){
 
-//         ColorSort(RingColor);
+//         //ColorSort(RingColor);
 //         encoderAvg = (LF.get_position()+RF.get_position()) / 2;
 //         setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
 //         voltage = calcPID(target, encoderAvg, STRAIGHT_INTEGRAL_KI, STRAIGHT_MAX_INTEGRAL);
@@ -424,7 +571,7 @@ void driveClamp(int target, int clampDistance){
 
     while(true){
 
-        ColorSort(RingColor);
+        //ColorSort(RingColor);
 
         encoderAvg = (LF.get_position()+RF.get_position()) / 2;
         setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
@@ -520,7 +667,7 @@ void driveSlow(int target, int speed){
 
     while(true){
 
-         ColorSort(RingColor);
+         //ColorSort(RingColor);
         encoderAvg = (LF.get_position()+RF.get_position()) / 2;
         setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
         voltage = calcPID(target, encoderAvg, STRAIGHT_INTEGRAL_KI, STRAIGHT_MAX_INTEGRAL); 
@@ -614,7 +761,7 @@ void driveStraightC(int target){
     resetEncoders();
 
     while(true){
-         ColorSort(RingColor);
+         //ColorSort(RingColor);
         encoderAvg = (LF.get_position()+RF.get_position()) / 2;
         setConstants(STRAIGHT_KP, STRAIGHT_KI, STRAIGHT_KD);
         voltage = calcPID(target, encoderAvg, STRAIGHT_INTEGRAL_KI, STRAIGHT_MAX_INTEGRAL);
@@ -701,7 +848,7 @@ void driveTurn(int target) {
     while(true){
         position = imu.get_heading();
 
-     ColorSort(RingColor);
+     //ColorSort(RingColor);
 
         if(position>180){
             position = (position-360);
@@ -778,7 +925,7 @@ void driveTurn2(int target) {
 
     while(true){
 
-    ColorSort(RingColor);
+    //ColorSort(RingColor);
      position = imu.get_heading();
 
     if(position > 180){
@@ -845,7 +992,7 @@ void driveArcL (double theta, double radius, int timeout){
 
     while (true){
 
-         ColorSort(RingColor);
+         //ColorSort(RingColor);
 
         double position = imu.get_heading();
 
@@ -921,7 +1068,7 @@ void driveArcR (double theta, double radius, int timeout){
     rtarget = double((theta/360) * 2 * pi * radius);
 
     while (true){
-         ColorSort(RingColor);
+         //ColorSort(RingColor);
 
         double position = imu.get_heading();
 
@@ -1008,7 +1155,7 @@ void driveArcLF (double theta, double radius, int timeout){
 
     while (true){
 
-         ColorSort(RingColor);
+         //ColorSort(RingColor);
 
         double position = imu.get_heading();
 
@@ -1106,7 +1253,7 @@ void driveArcRF (double theta, double radius, int timeout){
 
     while (true){
 
-         ColorSort(RingColor);
+         //ColorSort(RingColor);
 
         double position = imu.get_heading();
 
@@ -1185,58 +1332,80 @@ bool InitColor = false;
 int ColorCount;
 bool Backwards = false;
   
-void ColorSort (int color){
-    if(color==0){// blue rejection
-        if(OpticalC.get_hue()<240 && OpticalC.get_hue()>180){
-            InitColor = true; 
-        }
+//void ColorSort (int color){
+//     if(color==0){// blue rejection
+//         if(OpticalC.get_hue()<240 && OpticalC.get_hue()>180){
+//             InitColor = true; 
+//         }
   
-        if(InitColor){
+//         if(InitColor){
 
-            if( Backwards == false){
-                INTAKE.move(127);
+//             if( Backwards == false){
+//                 INTAKE.move(127);
             
-                 if(INTAKE.get_position() > 500){
-                Backwards = true;
-                 }
-            }else {
-                INTAKE.move(-127);
-                if(INTAKE.get_position() < 200){
-                    Backwards = false;
-                    InitColor = false; 
-                }
-            }
-        }else {
-            INTAKE.move(127);
-            INTAKE.tare_position();
-        }
+//                  if(INTAKE.get_position() > 500){
+//                 Backwards = true;
+//                  }
+//             }else {
+//                 INTAKE.move(-127);
+//                 if(INTAKE.get_position() < 200){
+//                     Backwards = false;
+//                     InitColor = false; 
+//                 }
+//             }
+//         }else {
+//             INTAKE.move(127);
+//             INTAKE.tare_position();
+//         }
 
 
+//     }else if(color==1){ // red rejection
+//         if(OpticalC.get_hue()>0 && OpticalC.get_hue()<40){
+//             InitColor = true;
+//         }
+//         if(InitColor){
 
-
-
-    }else if(color==1){ // red rejection
-        if(OpticalC.get_hue()>0 && OpticalC.get_hue()<40){
-            InitColor = true;
-        }
-        if(InitColor){
-
-            if( Backwards == false){
-                INTAKE.move(127);
+//             if( Backwards == false){
+//                 INTAKE.move(127);
             
-                 if(INTAKE.get_position() > 500){
-                Backwards = true;
-                 }
-            }else {
-                INTAKE.move(-127);
-                if(INTAKE.get_position() < 200){
-                    Backwards = false;
-                    InitColor = false; 
-                }
-            }
-        }else {
-            INTAKE.move(127);
-            INTAKE.tare_position();
-        }
-        }
+//                  if(INTAKE.get_position() > 500){
+//                 Backwards = true;
+//                  }
+//             }else {
+//                 INTAKE.move(-127);
+//                 if(INTAKE.get_position() < 200){
+//                     Backwards = false;
+//                     InitColor = false; 
+//                 }
+//             }
+//         }else {
+//             INTAKE.move(127);
+//             INTAKE.tare_position();
+//         }
+//         }
+// }
+
+void ColorSort2 ( ){
+    if(RingColor==1){
+        
+    }
+
+}
+
+
+void LadyBrownMove (){
+    if (lbmove == 1){
+        setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
+        LadyBrown1.move(calcPID4(12345, roto.get_position(), 0,0));
+    }else if(lbmove == 2){
+        setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
+        LadyBrown1.move(calcPID4(2345, roto.get_position(), 0,0));
+    }else if(lbmove == 3){
+         setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
+         LadyBrown1.move(calcPID4(1235, roto.get_position(), 0,0));
+    }else if(lbmove == 4){
+        setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
+        LadyBrown1.move(calcPID4(1345, roto.get_position(), 0,0));
+    }
+    
 }
