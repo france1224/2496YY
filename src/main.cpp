@@ -63,6 +63,7 @@ string autstr; //to print
 bool forward;
 bool backward;
 
+
 void competition_initialize() {
 
 	while(true){
@@ -145,6 +146,7 @@ void opcontrol() {
 	bool doinker_toggle;
 	bool ladybrown_toggle = false;
 	int macro = 0;
+	//double LBPos = 0;
 
     while(true) {
 
@@ -232,7 +234,7 @@ void opcontrol() {
 		int power = con.get_analog(ANALOG_LEFT_Y);
 		int RX = con.get_analog(ANALOG_RIGHT_X);
 
-		//curve
+		//curve - if joystick moves a little, then the robot moves a little. (vice versa for big :D)
 		//int turn = int(abs(RX) * RX / 75);
 		int turn = int(pow(RX,3)/15000);
 		//int turn = int(RX);
@@ -292,40 +294,43 @@ void opcontrol() {
 			}
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_R1)){
-			LadyBrown1.move(127);
+			LADYBROWN.move(127);
 			ladybrown_toggle = false;
 			ladybrown_angle = LadyBrown1.get_position();
 		} 
 		else if(con.get_digital(E_CONTROLLER_DIGITAL_R2)){
-			LadyBrown1.move(-127);
+			LADYBROWN.move(-127);
 			ladybrown_toggle = false;
 			ladybrown_angle = LadyBrown1.get_position();
 		}else if(ladybrown_toggle){
+			// LBPos = roto.get_angle();
+
+			// if(LBPos > 30000){
+			// 	LBPos -= 36000;
+			// }
+
 
 			if(macro == 0){
 				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD); //set the target!! for all
-				LadyBrown1.move(calcPID(149, roto.get_position(), 0, 0));
+				LadyBrown1.move(calcPID(35991, roto.get_position(), 0, 0));
 			}	else if (macro == 1){
 				setConstants(LADYBROWN_KP2, LADYBROWN_KI2, LADYBROWN_KD2);
-				LadyBrown1.move(calcPID(3600, roto.get_position(), 0, 0));
+				LadyBrown1.move(calcPID(1221, roto.get_position(), 0, 0));
 			}	else if(macro == 2){
-				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD);
-				LadyBrown1.move(calcPID(13675, roto.get_position(), 0, 0));
+				setConstants(LADYBROWN_KP2,LADYBROWN_KI2, LADYBROWN_KD2);
+				LadyBrown1.move(calcPID(10520, roto.get_position(), 0, 0));
 			}	else{
 				macro = 0;
 			}
 			} else {
 				setConstants(LADYBROWNHOLD_KP, LADYBROWNHOLD_KI, LADYBROWNHOLD_KD);
-				LadyBrown1.move(calcPID(ladybrown_angle, LadyBrown1.get_position(), 0, 0));
+				LADYBROWN.move(calcPID(ladybrown_angle, LadyBrown1.get_position(), 0, 0));
 			}
 
-
+//sha lalalalala ooo lala sha lalalalalala sha lalalalalala SHAAaaaa aaa sha lalalalalala oooo lala sha lalalalala you wanna...............................................................................................................kiss the girl
 	
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_L1)){
-			// INTAKE.move_velocity(600);
-			// INTAKE.move(127);
-			//CONVEYOR.move_velocity(600);
 			CONVEYOR.move(127);
 			forward = 1;
 		} else {
@@ -334,9 +339,6 @@ void opcontrol() {
 
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_L2)){
-			// INTAKE.move_velocity(-600);
-			// INTAKE.move(-127);
-			//CONVEYOR.move_velocity(-600);
 			CONVEYOR.move(-127);
 			backward = 1;
 		  }else{
@@ -344,13 +346,12 @@ void opcontrol() {
 		  }
 
 		if(forward + backward == 4){
-			// INTAKE.move(0);
 			CONVEYOR.move(0);
 		}
 
 		if (con.get_digital(E_CONTROLLER_DIGITAL_X)){
-			driveTurn2(90);
-			
+			//driveTurn2(90);
+			driveStraight2(1000);
 		}
 
 
@@ -366,5 +367,5 @@ void opcontrol() {
 	}
 
 	time++;
-	delay(1);	
+	pros::delay(1);	
 	}

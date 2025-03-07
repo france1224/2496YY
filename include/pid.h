@@ -7,6 +7,7 @@
 extern void driveStraight(int target);
 extern void driveTurn(int target);
 extern void driveTurn2(int target);
+extern void driveTurnT(int target);
 extern void driveStraight2(int target, int speed=100, int clampDistance=-1);
 extern void driveStraightC(int target);
 
@@ -23,10 +24,13 @@ extern void setConstants(double kp, double ki, double kd);
 
 extern void chasMove(int voltageLF, int voltageLB, int voltageLM, int voltageRF, int voltageRM, int voltageRB);
 
+extern void LadyBrownMove();
+
 extern void driveClamp (int target, int clampDistance);
 extern void driveSlow (int target, int speed);
 
-extern void ColorSort(int color);
+// extern void ColorSort(int color);
+// extern void ColorSort2(int color);
 
 extern void IntakeConveyor(int voltage);
 
@@ -40,9 +44,9 @@ extern int lbmove;
 
 
 
-#define STRAIGHT_KP 1.3
-#define STRAIGHT_KI 0.5
-#define STRAIGHT_KD 7
+#define STRAIGHT_KP 1
+#define STRAIGHT_KI 0
+#define STRAIGHT_KD 0
 
 #define STRAIGHT_INTEGRAL_KI 40
 #define STRAIGHT_MAX_INTEGRAL 14.5
@@ -74,13 +78,13 @@ extern int lbmove;
 
 //more vertical (maco 0/1 etc)
 #define LADYBROWN_KP 0.01
-#define LADYBROWN_KD 10
-#define LADYBROWN_KI 0
+#define LADYBROWN_KD 12000
+#define LADYBROWN_KI 0.0003
 
 //more horizontal (macro 2/3)
-#define LADYBROWN_KP2 0.025
-#define LADYBROWN_KD2 10000
-#define LADYBROWN_KI2 0
+#define LADYBROWN_KP2 0.02
+#define LADYBROWN_KD2 12000
+#define LADYBROWN_KI2 0.0003
 
 #define LADYBROWN_INTEGRAL_KI 0
 #define LADYBROWN_MAX_INTEGRAL 0
