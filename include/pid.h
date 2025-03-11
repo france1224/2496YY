@@ -44,32 +44,32 @@ extern int lbmove;
 
 
 
-#define STRAIGHT_KP 1
+#define STRAIGHT_KP 1.9
 #define STRAIGHT_KI 0
-#define STRAIGHT_KD 0
+#define STRAIGHT_KD 10
 
 #define STRAIGHT_INTEGRAL_KI 40
 #define STRAIGHT_MAX_INTEGRAL 14.5
 
 #define TURN_KP 5
-#define TURN_KI 0.001
-#define TURN_KD 57
+#define TURN_KI 0
+#define TURN_KD 45
 
 #define TURN_INTEGRAL_KI 30
 #define TURN_MAX_INTEGRAL 25
 
 #define ARC_CORRECTION_KP 30
 
-#define HEADING_KP 8
+#define HEADING_KP 16
 #define HEADING_KI 0
-#define HEADING_KD 0
+#define HEADING_KD 100
 
 #define HEADING_INTEGRAL_KI 0
 #define HEADING_MAX_INTEGRAL 0
 
 #define ARC_HEADING_KP 4
 #define ARC_HEADING_KI 0
-#define ARC_HEADING_KD 0
+#define ARC_HEADING_KD 10
 
 #define ARC_HEADING_INTEGRAL_KI 0
 #define ARC_HEADING_MAX_INTEGRAL 0

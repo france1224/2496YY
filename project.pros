@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "8838A",
+    "project_name": "8838",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -167,9 +167,9 @@
       }
     },
     "upload_options": {
-      "description": "My PROS Project",
+      "description": "4 rings ",
       "slot": 1,
-      "icon": "robot"
+      "icon": "alien"
     },
     "use_early_access": false
   }

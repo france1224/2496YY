@@ -501,8 +501,12 @@ void driveStraight2(int target, int speed, int clampDistance){
           break;
         }
 
-        if (time2%50==0){
-        con.print(0, 0, "Error: %i         ", int(time2));
+        if (time2%50==0 && time2%100 != 0 && time2 % 150 != 0){
+        con.print(0, 0, "Error: %f         ", float(error));
+        } else if (time2 % 100 == 0 && time2 % 150 != 0){
+            con.print(1, 0, "EncoderAvg: %f           ", float(encoderAvg));
+        }else if (time2 % 150 == 0){
+            con.print(2, 0, "Time: %f          ", float(time2));
         }
         delay(10);
         time2+=10;
@@ -1019,8 +1023,8 @@ void driveTurn2(int target) {
     }
 
     
-    if(abs(error)<=5){
-        setConstants(9.5, 0,0);
+    if(abs(error)<=2){
+        setConstants(12, 0,0);
     } else {
         setConstants(TURN_KP, TURN_KI, TURN_KD);
     }
@@ -1179,7 +1183,7 @@ void driveArcL (double theta, double radius, int timeout){
     resetEncoders();
 
     ltarget = double((theta/360) * 2 * pi * radius);
-    rtarget = double((theta/360) * 2 * pi * (radius+750));
+    rtarget = double((theta/360) * 2 * pi * (radius+565));
 
     while (true){
 
@@ -1255,7 +1259,7 @@ void driveArcR (double theta, double radius, int timeout){
     time2 = 0;
     resetEncoders();
 
-    ltarget = double((theta/360) * 2 * pi * (radius+750));
+    ltarget = double((theta/360) * 2 * pi * (radius+565));
     rtarget = double((theta/360) * 2 * pi * radius);
 
     while (true){
@@ -1339,10 +1343,10 @@ void driveArcLF (double theta, double radius, int timeout){
     }
 
     ltargetFinal = double((theta/360) * 2 * pi * radius);
-    rtargetFinal = double((theta/360) * 2 * pi * (radius+750));
+    rtargetFinal = double((theta/360) * 2 * pi * (radius+565));
     theta = theta+45;
     ltarget = double((theta/360) * 2 * pi * radius);
-    rtarget = double((theta/360) * 2 * pi * (radius+750));
+    rtarget = double((theta/360) * 2 * pi * (radius+565));
 
     while (true){
 
@@ -1403,7 +1407,7 @@ void driveArcLF (double theta, double radius, int timeout){
         //     }
         // }
         if (over || time2 > timeout){
-            break;
+            //break;
         }
 
         if(time2 % 50 == 0 && time2 % 100 != 0 && time2 % 150 != 0){
@@ -1436,10 +1440,10 @@ void driveArcRF (double theta, double radius, int timeout){
     resetEncoders();
     double rightcorrect = 0;
 
-    ltargetFinal = double((theta/360) * 2 * pi * (radius+750));
+    ltargetFinal = double((theta/360) * 2 * pi * (radius+565));
     rtargetFinal = double((theta/360) * 2 * pi * radius);
     theta = theta+45;
-    ltarget = double((theta/360) * 2 * pi * (radius+750));
+    ltarget = double((theta/360) * 2 * pi * (radius+565));
     rtarget = double((theta/360) * 2 * pi * radius);
 
     while (true){
@@ -1501,7 +1505,7 @@ void driveArcRF (double theta, double radius, int timeout){
         // }
 
         if (over || time2>timeout){
-            break;
+            //break;
         }
 
         if(time2 % 50 == 0 && time2 % 100 != 0 && time2 % 150 != 0){
