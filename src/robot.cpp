@@ -31,8 +31,8 @@ pros::Motor RF (RF_PORT, pros::E_MOTOR_GEARSET_06, false);
 pros::Motor RM (RM_PORT, pros::E_MOTOR_GEARSET_06, true);
 pros::Motor RB (RB_PORT, pros::E_MOTOR_GEARSET_06, false);
 
-pros::Motor LadyBrown1 (LADYBROWN_PORT, pros::E_MOTOR_GEARSET_06, false);
-pros::Motor LadyBrown2 (LADYBROWN_PORT, pros::E_MOTOR_GEARSET_06, true);
+pros::Motor LadyBrown1 (LADYBROWN_PORT, pros::E_MOTOR_GEARSET_36, true);
+pros::Motor LadyBrown2 (LADYBROWN_PORT2, pros::E_MOTOR_GEARSET_36, false);
 pros::Motor_Group LADYBROWN ({LadyBrown1, LadyBrown2});
 pros::Controller con (pros::E_CONTROLLER_MASTER);
 

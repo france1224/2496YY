@@ -1407,7 +1407,7 @@ void driveArcLF (double theta, double radius, int timeout){
         //     }
         // }
         if (over || time2 > timeout){
-            //break;
+            break;
         }
 
         if(time2 % 50 == 0 && time2 % 100 != 0 && time2 % 150 != 0){
@@ -1505,7 +1505,7 @@ void driveArcRF (double theta, double radius, int timeout){
         // }
 
         if (over || time2>timeout){
-            //break;
+            break;
         }
 
         if(time2 % 50 == 0 && time2 % 100 != 0 && time2 % 150 != 0){

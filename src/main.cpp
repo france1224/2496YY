@@ -146,11 +146,33 @@ void opcontrol() {
 	bool doinker_toggle;
 	bool ladybrown_toggle = false;
 	int macro = 0;
-	//double LBPos = 0;
+	double LBPos = 0;
 
     while(true) {
 
-	
+	// delay(5000);
+	// driveStraightC(960);
+	// driveArcLF(30, 14, 500);
+	// driveStraight2(400);
+	// delay(10);
+	// doinker.set_value(true);
+	// delay(9);
+	// driveStraight2(-800);
+	// doinker.set_value(false);
+	// driveTurn2(150);
+	// driveStraight2(-500);
+	// mogo.set_value(true);
+	// CONVEYOR.move(127);
+	// delay(100);
+	// driveTurn2(180);
+	// driveStraight2(660);
+	// driveTurn2(270);
+	// driveStraight2(1400);
+	// driveTurn2(180);
+	// driveStraight2(-500);
+	// mogo.set_value(true);
+	// driveTurn2(90);
+	// driveStraight2(600);
 
 
 		//if(selec.get_value() == true){
@@ -294,35 +316,30 @@ void opcontrol() {
 			}
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_R1)){
-			//LADYBROWN.move(127);
-			LadyBrown1.move(127);
-			LadyBrown2.move(127);
+			LADYBROWN.move(127);
 			ladybrown_toggle = false;
 			ladybrown_angle = LadyBrown1.get_position();
 		} 
 		else if(con.get_digital(E_CONTROLLER_DIGITAL_R2)){
-			//LADYBROWN.move(-127);
-			LadyBrown1.move(-127);
-			LadyBrown2.move(-127);
+			LADYBROWN.move(-127);
 			ladybrown_toggle = false;
 			ladybrown_angle = LadyBrown1.get_position();
 		}else if(ladybrown_toggle){
-			// LBPos = roto.get_angle();
+			LBPos = roto.get_angle();
 
-			// if(LBPos > 30000){
-			// 	LBPos -= 36000;
-			// }
-
+			if(LBPos > 30000){
+				LBPos -= 36000;
+			}
 
 			if(macro == 0){
 				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD); //set the target!! for all
-				LADYBROWN.move(calcPID(35991, roto.get_position(), 0, 0));
+				LADYBROWN.move(calcPID(474, roto.get_position(), 0, 0));
 			}	else if (macro == 1){
 				setConstants(LADYBROWN_KP2, LADYBROWN_KI2, LADYBROWN_KD2);
-				LADYBROWN.move(calcPID(1221, roto.get_position(), 0, 0));
+				LADYBROWN.move(calcPID(12000, roto.get_position(), 0, 0));
 			}	else if(macro == 2){
 				setConstants(LADYBROWN_KP2,LADYBROWN_KI2, LADYBROWN_KD2);
-				LADYBROWN.move(calcPID(10520, roto.get_position(), 0, 0));
+				LADYBROWN.move(calcPID(34470, roto.get_position(), 0, 0));
 			}	else{
 				macro = 0;
 			}
@@ -356,9 +373,13 @@ void opcontrol() {
 		if (con.get_digital(E_CONTROLLER_DIGITAL_X)){
 			//driveTurn2(45);
 			//driveStraight2(1500);
-			driveStraightC(500);
-			driveArcRF(45, 5, 10000);
-			driveStraight2(100);
+			driveStraightC(840);
+			driveArcLF(30, 14, 500);
+			driveStraight2(400);
+			delay(10);
+			doinker.set_value(true);
+			delay(500);
+			driveStraight2(-800);
 
 		}
 

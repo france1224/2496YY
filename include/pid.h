@@ -58,18 +58,18 @@ extern int lbmove;
 #define TURN_INTEGRAL_KI 30
 #define TURN_MAX_INTEGRAL 25
 
-#define ARC_CORRECTION_KP 30
+#define ARC_CORRECTION_KP 18
 
-#define HEADING_KP 16
+#define HEADING_KP 8
 #define HEADING_KI 0
-#define HEADING_KD 100
+#define HEADING_KD 0
 
 #define HEADING_INTEGRAL_KI 0
 #define HEADING_MAX_INTEGRAL 0
 
 #define ARC_HEADING_KP 4
-#define ARC_HEADING_KI 0
-#define ARC_HEADING_KD 10
+#define ARC_HEADING_KI 0.1
+#define ARC_HEADING_KD 12
 
 #define ARC_HEADING_INTEGRAL_KI 0
 #define ARC_HEADING_MAX_INTEGRAL 0
@@ -79,12 +79,12 @@ extern int lbmove;
 //more vertical (maco 0/1 etc)
 #define LADYBROWN_KP 0.01
 #define LADYBROWN_KD 12000
-#define LADYBROWN_KI 0.0003
+#define LADYBROWN_KI 0.003
 
 //more horizontal (macro 2/3)
-#define LADYBROWN_KP2 0.02
+#define LADYBROWN_KP2 0.01
 #define LADYBROWN_KD2 12000
-#define LADYBROWN_KI2 0.0003
+#define LADYBROWN_KI2 0.003
 
 #define LADYBROWN_INTEGRAL_KI 0
 #define LADYBROWN_MAX_INTEGRAL 0
