@@ -4,4 +4,6 @@
 #ifndef AUTONH
 #define AUTONH
 
+extern void autonomous();
+
 #endif

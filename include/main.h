@@ -71,7 +71,7 @@ void opcontrol(void);
 }
 #endif
 
-extern int RingColor;
+extern int color;
 extern bool mogo_toggle;
 extern int atn;
 

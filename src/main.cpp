@@ -56,7 +56,7 @@ void disabled() {}
  * starts.
  */
 
-int RingColor = 2;
+int color = 0;
 int atn = 0; //decides everything!!
 int pressed = 0;
 string autstr; //to print
@@ -228,13 +228,13 @@ void opcontrol() {
 		} else if (atn == 1){
 			autstr = "Skills";
 
-	} else if (atn == 2){
+		} else if (atn == 2){
 			autstr = "REDL";
 
-} else if (atn == 3){
+		} else if (atn == 3){
 			autstr = "REDR";
 
-} else if (atn == 4){
+		} else if (atn == 4){
 			autstr = "BLUEL";
 
 		} else if (atn == 5){
@@ -244,6 +244,7 @@ void opcontrol() {
 			atn = 0;
 		}
 
+	
 		prev_imu = curr_imu;
 		curr_imu = imu.get_rotation();
 		if(time %50 == 0 && time %100 != 0 && time % 150 != 0){
@@ -312,7 +313,9 @@ void opcontrol() {
 
 			if (con.get_digital_new_press(E_CONTROLLER_DIGITAL_UP)){
 				ladybrown_toggle = true;
-				macro++;
+				// macro++;
+				//ladybrown_toggle = false;
+				LADYBROWN.move_relative(240, 127);
 			}
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_R1)){
@@ -328,28 +331,28 @@ void opcontrol() {
 			LBPos = roto.get_angle();
 
 			if(LBPos > 30000){
-				LBPos -= 36000;
+				LBPos -= 36000; //wont go all the way around
 			}
 
-			if(macro == 0){
-				setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD); //set the target!! for all
-				LADYBROWN.move(calcPID(474, roto.get_position(), 0, 0));
-			}	else if (macro == 1){
-				setConstants(LADYBROWN_KP2, LADYBROWN_KI2, LADYBROWN_KD2);
-				LADYBROWN.move(calcPID(12000, roto.get_position(), 0, 0));
-			}	else if(macro == 2){
-				setConstants(LADYBROWN_KP2,LADYBROWN_KI2, LADYBROWN_KD2);
-				LADYBROWN.move(calcPID(34470, roto.get_position(), 0, 0));
-			}	else{
-				macro = 0;
-			}
+			// if(macro == 0){
+			// 	setConstants(LADYBROWN_KP, LADYBROWN_KI, LADYBROWN_KD); //set the target!! for all
+			// 	LADYBROWN.move(calcPID(910, roto.get_position(), 0, 0)); //resting position
+			// }	else if (macro == 1){
+			// 	setConstants(LADYBROWN_KP2, LADYBROWN_KI2, LADYBROWN_KD2);
+			// 	LADYBROWN.move(calcPID(11680, roto.get_position(), 0, 0)); //picking up position
+			// }	else if(macro == 2){
+			// 	setConstants(LADYBROWN_KP2,LADYBROWN_KI2, LADYBROWN_KD2);
+			// 	LADYBROWN.move(calcPID(34470, roto.get_position(), 0, 0)); //scoring position
+			// }	else{
+			// 	macro = 0; //turns macro off for manual control
+			// }
 			} else {
 				setConstants(LADYBROWNHOLD_KP, LADYBROWNHOLD_KI, LADYBROWNHOLD_KD);
-				LADYBROWN.move(calcPID(ladybrown_angle, LadyBrown1.get_position(), 0, 0));
-			}
+				LADYBROWN.move(calcPID(ladybrown_angle, LadyBrown1.get_position(), 0, 0)); //holds so it doesnt go down
+			 }
 
-//sha lalalalala ooo lala sha lalalalalala sha lalalalalala SHAAaaaa aaa sha lalalalalala oooo lala sha lalalalala you wanna...............................................................................................................kiss the girl
-	
+
+			
 
 		if(con.get_digital(E_CONTROLLER_DIGITAL_L1)){
 			CONVEYOR.move(127);

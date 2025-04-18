@@ -15,7 +15,7 @@
 #define RM_PORT 14//x
 #define RB_PORT 2 //x
 #define IMU_PORT 3 //x
-#define OPTICAL_PORT 12
+#define OPTICAL_PORT 8
 #define LADYBROWN_PORT 10 //x
 #define LADYBROWN_PORT2 6//x
 #define ROTO_PORT 5 //x
@@ -41,12 +41,12 @@ pros::Rotation roto (ROTO_PORT);
 pros::Imu imu (IMU_PORT);
 
 //DigitalOut = piston
-pros::ADIDigitalIn selec ('D');
+pros::ADIDigitalIn selec ('E');
 
 pros::ADIDigitalOut mogo ('A');
 
-pros::ADIDigitalOut colorsort ('B');
+pros::ADIDigitalOut colorsort ('D');
 
 pros::ADIDigitalOut doinker ('C');
 
-pros::Optical OpticalC (OPTICAL_PORT, 10);
+pros::Optical OpticalC (OPTICAL_PORT);

@@ -29,7 +29,7 @@ extern void LadyBrownMove();
 extern void driveClamp (int target, int clampDistance);
 extern void driveSlow (int target, int speed);
 
-// extern void ColorSort(int color);
+extern void ColorSort();
 // extern void ColorSort2(int color);
 
 extern void IntakeConveyor(int voltage);
@@ -46,7 +46,7 @@ extern int lbmove;
 
 #define STRAIGHT_KP 1.9
 #define STRAIGHT_KI 0
-#define STRAIGHT_KD 10
+#define STRAIGHT_KD 9.8
 
 #define STRAIGHT_INTEGRAL_KI 40
 #define STRAIGHT_MAX_INTEGRAL 14.5
@@ -82,7 +82,7 @@ extern int lbmove;
 #define LADYBROWN_KI 0.003
 
 //more horizontal (macro 2/3)
-#define LADYBROWN_KP2 0.01
+#define LADYBROWN_KP2 0.012
 #define LADYBROWN_KD2 12000
 #define LADYBROWN_KI2 0.003
 

@@ -93,9 +93,98 @@ void chasMove(int voltageLF, int voltageLB, int voltageLM, int voltageRF, int vo
     RB.move(voltageRB);
 }
 
+bool InitColor = false;
+int ColorCount;
+bool stalled = false;
+int hookCount = 0;
+double hookPos = 0;
+double prevHook = 0;
+int stallTime = 0;
+void ColorSort(){
+    OpticalC.set_led_pwm(100);
+    if(color == 1){//bye bye blue
+        if((OpticalC.get_hue()<270 && OpticalC.get_hue()>170)&& OpticalC.get_proximity()>100){
+            InitColor = true;
+        }
+
+        if(InitColor && ColorCount < 600){ // change 600 for how long piston is out
+           delay(5);
+            colorsort.set_value(true);
+            ColorCount += 10;
+        } else {
+            ColorCount = 0;
+            InitColor = false;
+            colorsort.set_value(false);
+        }
+
+        if(InitColor == false){
+            prevHook = hookPos;
+            hookPos = CONVEYOR.get_position();
+            if(prevHook==hookPos){
+                hookCount++;
+            }
+
+            if(hookCount>100){ //times 10 = # of milliseconds to stall for, big = less sensitive
+                stalled = true;
+            }
+
+            if(stalled){
+                CONVEYOR.move(-127);
+                stallTime++==10;
+                if(stallTime > 300){
+                    hookCount = 0;
+                    stalled = false;
+                    stallTime = 0;
+                }
+            } else {
+                CONVEYOR.move(127);
+            }
+        }
+
+    } else if (color == 2){//bye bye red
+        if((OpticalC.get_hue()<30 || OpticalC.get_hue()>350) && OpticalC.get_proximity() >100){ //change the 100 depending on how it works ehehehe importante!! no lights grrrrr, fix proximity
+            InitColor = true;
+        }
+
+        if(InitColor && ColorCount < 600){
+            delay(5);
+            colorsort.set_value(true);
+            ColorCount+=10;
+        }else {
+            ColorCount = 0;
+            InitColor = false;
+            colorsort.set_value(false);
+        }
+
+        if(InitColor == false){
+            prevHook = hookPos;
+            hookPos = CONVEYOR.get_position();
+            if(prevHook==hookPos){
+                hookCount++;
+            }
+
+            if(hookCount>8){ //times 10 = # of milliseconds to stall for, big = less sensitive
+                stalled = true;
+            }
+
+            if(stalled){
+                CONVEYOR.move(-127);
+                stallTime++==10;
+                if(stallTime > 300){
+                    hookCount = 0;
+                    stalled = false;
+                    stallTime = 0;
+                }
+            } else {
+                CONVEYOR.move(127);
+            }
+        }
+    }
+}
+
 double calcPID(double target, double input, int integralKi, int maxIntegral){
     LadyBrownMove();
-    //ColorSort2();
+    ColorSort();
     int integral;
     prevError = error;
     error = target-input;
@@ -192,7 +281,7 @@ double calcPID4(double target, double input, int integralKi, int maxIntegral){
 
 }
 
-double calcPIDt(double target, double input, int integralKi, int maxIntegral){
+ double calcPIDt(double target, double input, int integralKi, int maxIntegral){
     int integralt;
     prevErrort = errort;
     errort = target-input;
@@ -221,9 +310,9 @@ double calcPIDt(double target, double input, int integralKi, int maxIntegral){
 }
 
 
-bool InitColor = false;
-int ColorCount;
-bool Backwards = false;
+// bool InitColor = false;
+// int ColorCount;
+// bool Backwards = false;
   
 //void ColorSort (int color){
 //     if(color==0){// blue rejection
