@@ -148,7 +148,11 @@ void opcontrol() {
 	int macro = 0;
 	double LBPos = 0;
 
+
+
     while(true) {
+
+		color=0;
 
 	// delay(5000);
 	// driveStraightC(960);

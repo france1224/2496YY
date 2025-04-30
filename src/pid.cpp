@@ -124,7 +124,7 @@ void ColorSort(){
                 hookCount++;
             }
 
-            if(hookCount>100){ //times 10 = # of milliseconds to stall for, big = less sensitive
+            if(hookCount>200){ //times 10 = # of milliseconds to stall for, big = less sensitive
                 stalled = true;
             }
 
@@ -163,7 +163,7 @@ void ColorSort(){
                 hookCount++;
             }
 
-            if(hookCount>8){ //times 10 = # of milliseconds to stall for, big = less sensitive
+            if(hookCount>200){ //times 10 = # of milliseconds to stall for, big = less sensitive
                 stalled = true;
             }
 
