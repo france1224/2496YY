@@ -8,12 +8,12 @@
 //Defines the port so this is the only part that  needs to be changed if the port changes
 #define INTAKE_PORT 20 //x
 #define CONVEYOR_PORT 20 //x
-#define LF_PORT 12 //x
-#define LM_PORT 16 //x
-#define LB_PORT 1 //x
-#define RF_PORT 11 //x
-#define RM_PORT 14//x
-#define RB_PORT 2 //x
+#define LF_PORT 2
+#define LM_PORT 1
+#define LB_PORT 11 
+#define RF_PORT 8 
+#define RM_PORT 9 
+#define RB_PORT 10 
 #define IMU_PORT 3 //x
 #define OPTICAL_PORT 8
 #define LADYBROWN_PORT 10 //x

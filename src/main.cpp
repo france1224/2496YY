@@ -258,7 +258,7 @@ void opcontrol() {
 		} else if (time % 50 == 0){
 			con.print(2,0, "time: %f     ", int(time2));
 		}
-		int power = con.get_analog(ANALOG_LEFT_Y);
+		int power = con.get_analog(ANALOG_RIGHT_Y);
 		int RX = con.get_analog(ANALOG_RIGHT_X);
 
 		//curve - if joystick moves a little, then the robot moves a little. (vice versa for big :D)
