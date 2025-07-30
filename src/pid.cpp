@@ -2,7 +2,7 @@
 #include "main.h"
 #include "robot.h"
 #include "pid.h"
-#include "odometry.h"
+
 #include "auton.h"
 
 using namespace pros;

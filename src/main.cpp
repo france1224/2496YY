@@ -2,7 +2,6 @@
 #include "robot.h"
 #include "pid.h"
 #include "auton.h"
-#include "odometry.h"
 #include "api.h"
 
 using namespace pros;
@@ -259,12 +258,11 @@ void opcontrol() {
 			con.print(2,0, "time: %f     ", int(time2));
 		}
 		int power = con.get_analog(ANALOG_RIGHT_Y);
-		int RX = con.get_analog(ANALOG_RIGHT_X);
+		int RX = con.get_analog(ANALOG_LEFT_X);
 
 		//curve - if joystick moves a little, then the robot moves a little. (vice versa for big :D)
-		//int turn = int(abs(RX) * RX / 75);
-		int turn = int(pow(RX,3)/15000);
-		//int turn = int(RX);
+		//int turn = int(pow(RX,3)/15000);
+		int turn = int(RX);
 
 		int left = power+turn;
 		int right = power-turn;
